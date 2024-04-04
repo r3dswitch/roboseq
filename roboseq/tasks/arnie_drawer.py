@@ -111,18 +111,12 @@ class ArnieDrawer(BaseTask):
 
         super().__init__(cfg=self.cfg)
 
-        actor_root_state_tensor = self.gym.acquire_actor_root_state_tensor(
-            self.sim
-        )  # (2,13)
+        actor_root_state_tensor = self.gym.acquire_actor_root_state_tensor(self.sim)  # (2,13)
         dof_state_tensor = self.gym.acquire_dof_state_tensor(self.sim)  # (68,2)
-        rigid_body_tensor = self.gym.acquire_rigid_body_state_tensor(
-            self.sim
-        )  # (88,13)
+        rigid_body_tensor = self.gym.acquire_rigid_body_state_tensor(self.sim)  # (88,13)
         dof_force_tensor = self.gym.acquire_dof_force_tensor(self.sim)  # (68,)
 
-        self.dof_force_tensor = gymtorch.wrap_tensor(dof_force_tensor).view(
-            self.num_envs, self.num_arnie_dofs + self.num_object_dofs
-        )
+        self.dof_force_tensor = gymtorch.wrap_tensor(dof_force_tensor).view(self.num_envs, self.num_arnie_dofs + self.num_object_dofs)
 
         self.gym.refresh_actor_root_state_tensor(self.sim)
         self.gym.refresh_dof_state_tensor(self.sim)
@@ -130,9 +124,7 @@ class ArnieDrawer(BaseTask):
 
         self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
 
-        self.arnie_dof_state = self.dof_state.view(self.num_envs, -1, 2)[
-            :, : self.num_arnie_dofs
-        ]
+        self.arnie_dof_state = self.dof_state.view(self.num_envs, -1, 2)[:, : self.num_arnie_dofs]
         self.arnie_dof_pos = self.arnie_dof_state[..., 0]
         self.arnie_dof_vel = self.arnie_dof_state[..., 1]
 
@@ -203,7 +195,7 @@ class ArnieDrawer(BaseTask):
             ],
             dtype=torch.float,
             device=self.device,
-        )  # self.arnie_default_dof_pos = torch.zeros(self.num_arnie_dofs, dtype=torch.float, device=self.device)
+        ) 
 
         self.root_state_tensor = gymtorch.wrap_tensor(actor_root_state_tensor).view(-1, 13)
         self.hand_positions = self.root_state_tensor[:, 0:3]
@@ -218,40 +210,13 @@ class ArnieDrawer(BaseTask):
         self.num_bodies = self.rigid_body_states.shape[1]
 
         self.num_dofs = self.gym.get_sim_dof_count(self.sim) // self.num_envs
-        self.prev_targets = torch.zeros(
-            (self.num_envs, self.num_dofs), dtype=torch.float, device=self.device
-        )
-        self.cur_targets = torch.zeros(
-            (self.num_envs, self.num_dofs), dtype=torch.float, device=self.device
-        )
+        self.prev_targets = torch.zeros((self.num_envs, self.num_dofs), dtype=torch.float, device=self.device)
+        self.cur_targets = torch.zeros((self.num_envs, self.num_dofs), dtype=torch.float, device=self.device)
 
-        self.global_indices = torch.arange(
-            self.num_envs * 3, dtype=torch.int32, device=self.device
-        ).view(self.num_envs, -1)
-        self.x_unit_tensor = to_torch(
-            [1, 0, 0], dtype=torch.float, device=self.device
-        ).repeat((self.num_envs, 1))
-        self.y_unit_tensor = to_torch(
-            [0, 1, 0], dtype=torch.float, device=self.device
-        ).repeat((self.num_envs, 1))
-        self.z_unit_tensor = to_torch(
-            [0, 0, 1], dtype=torch.float, device=self.device
-        ).repeat((self.num_envs, 1))
+        self.global_indices = torch.arange(self.num_envs * 3, dtype=torch.int32, device=self.device).view(self.num_envs, -1)
 
-        self.successes = torch.zeros(
-            self.num_envs, dtype=torch.float, device=self.device
-        )
-        self.consecutive_successes = torch.zeros(
-            1, dtype=torch.float, device=self.device
-        )
-
-        self.av_factor = to_torch(self.av_factor, dtype=torch.float, device=self.device)
-        self.apply_forces = torch.zeros(
-            (self.num_envs, self.num_bodies, 3), device=self.device, dtype=torch.float
-        )
-        self.apply_torque = torch.zeros(
-            (self.num_envs, self.num_bodies, 3), device=self.device, dtype=torch.float
-        )
+        self.successes = torch.zeros(self.num_envs, dtype=torch.float, device=self.device)
+        self.consecutive_successes = torch.zeros(1, dtype=torch.float, device=self.device)
 
         self.total_successes = 0
         self.total_resets = 0
@@ -266,10 +231,9 @@ class ArnieDrawer(BaseTask):
             self.physics_engine,
             self.sim_params,
         )
+
         self._create_ground_plane()
-        self._create_envs(
-            self.num_envs, self.cfg["env"]["envSpacing"], int(np.sqrt(self.num_envs))
-        )
+        self._create_envs(self.num_envs, self.cfg["env"]["envSpacing"], int(np.sqrt(self.num_envs)))
 
     def _create_ground_plane(self):
         plane_params = gymapi.PlaneParams()
@@ -294,28 +258,18 @@ class ArnieDrawer(BaseTask):
         arnie_asset_file = "urdf/ArnieHIT/arnie_fxd.urdf"
         object_asset_file = "urdf/cup/cup.urdf"
         table_asset_file = "urdf/square_table.urdf"
+        
         asset_options = gymapi.AssetOptions()
         asset_options.disable_gravity = True
         asset_options.fix_base_link = True
-        asset_options.vhacd_enabled = True
+        asset_options.vhacd_enabled = False
         asset_options.use_mesh_materials = True
         asset_options.vhacd_params = gymapi.VhacdParams()
-        asset_options.vhacd_params.resolution = 1000
-        asset_options.vhacd_params.concavity = 0.0025
-        asset_options.vhacd_params.alpha = 0.04
-        asset_options.vhacd_params.beta = 1.0
-        asset_options.vhacd_params.convex_hull_downsampling = 4
-        asset_options.vhacd_params.max_num_vertices_per_ch = 256
+        asset_options.vhacd_params.resolution = 1
 
-        arnie_asset = self.gym.load_asset(
-            self.sim, asset_root, arnie_asset_file, asset_options
-        )
-        object_asset = self.gym.load_asset(
-            self.sim, asset_root, object_asset_file, asset_options
-        )
-        table_asset = self.gym.load_asset(
-            self.sim, asset_root, table_asset_file, asset_options
-        )
+        arnie_asset = self.gym.load_asset(self.sim, asset_root, arnie_asset_file, asset_options)
+        object_asset = self.gym.load_asset(self.sim, asset_root, object_asset_file, asset_options)
+        table_asset = self.gym.load_asset(self.sim, asset_root, table_asset_file, asset_options)
 
         arnie_dof_props = self.gym.get_asset_dof_properties(arnie_asset)
         object_dof_props = self.gym.get_asset_dof_properties(object_asset)
@@ -618,27 +572,14 @@ class ArnieDrawer(BaseTask):
         self.cur_targets[:, :self.num_arnie_dofs] = self.act_moving_average * self.cur_targets[:, :self.num_arnie_dofs] + (1.0 - self.act_moving_average) * self.prev_targets[:, :self.num_arnie_dofs]
         self.cur_targets[:, :self.num_arnie_dofs] = tensor_clamp(self.cur_targets[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits)
 
-        big_idxs = [9]
-        small_idxs = [13]
-
-        for i in big_idxs:
-            self.apply_forces[:, i, :] = actions[:, i * 3 : i * 3 + 3] * self.dt * self.transition_scale * 100000
-            self.apply_torque[:, i, :] = self.actions[:, i * 3 : i * 3 + 3] * self.dt * self.orientation_scale * 1000
-
-        for i in small_idxs:
-            self.apply_forces[:, i, :] = actions[:, i * 3 : i * 3 + 3] * self.dt * self.transition_scale * 10
-            self.apply_torque[:, i, :] = self.actions[:, i * 3 : i * 3 + 3] * self.dt * self.orientation_scale * 0.1
-
-        self.gym.apply_rigid_body_force_tensors(self.sim, gymtorch.unwrap_tensor(self.apply_forces), gymtorch.unwrap_tensor(self.apply_torque), gymapi.ENV_SPACE)
-
         self.prev_targets[:, :self.num_arnie_dofs] = self.cur_targets[:, :self.num_arnie_dofs]
         
     def post_physics_step(self):
-        print(self.progress_buf)
         self.progress_buf += 1
         self.randomize_buf += 1
 
         self.compute_observations()
+        self.compute_reward(self.actions)
 
 @torch.jit.script
 def compute_hand_reward(
