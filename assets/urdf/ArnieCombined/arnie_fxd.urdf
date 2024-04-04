@@ -1,0 +1,2055 @@
+<?xml version="1.0" ?>
+<robot name="arnie">
+  <material name="Blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="Grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+  <material name="LightGrey">
+    <color rgba="0.6 0.6 0.6 1.0"/>
+  </material>
+  <material name="Red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="White">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <link name="body">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.33110743457779"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/arnie_body.stl"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.796078431372549 0.823529411764706 0.937254901960784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/arnie_body.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_to_left" type="fixed">
+    <origin rpy="-1.5652925671162337 0 -0.227" xyz="0 0.1 1.45"/>
+    <parent link="body"/>
+    <child link="left_base"/>
+    <axis xyz="0 0 0"/>
+    <limit effort="235" lower="-1.57" upper="1.57" velocity="2.618"/>
+  </joint>
+  <link name="left_base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.00153097191906452 0.00152031034664837 0.0524230280849149"/>
+      <mass value="1.33110743457779"/>
+      <inertia ixx="0.00695879790529406" ixy="9.99328685258342E-05" ixz="7.99577031212481E-05" iyy="0.00695365531716522" iyz="7.90796997368543E-05" izz="0.00729823323321907"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/base.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.796078431372549 0.823529411764706 0.937254901960784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/base.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="left_link_1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="5.5234067920554E-05  -0.0254878204920178 0.0355441421264809"/>
+      <mass value="1.09025546409174"/>
+      <inertia ixx="0.00585031196428369" ixy="1.4630349447555E-07" ixz="1.35351687162397E-06" iyy="0.00645496952227061" iyz="-0.00104800484741808" izz="0.00459531291521244"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_1.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.796078431372549 0.823529411764706 0.937254901960784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_1" type="revolute">
+    <origin rpy="-3.1415926535795866 0.0 -0.0" xyz="0.0 -2.9150689157e-12 0.2856"/>
+    <parent link="left_base"/>
+    <child link="left_link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="235" lower="-3.12" upper="3.12" velocity="2.618"/>
+  </joint>
+  <link name="left_link_2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-3.62724763868157E-06 -0.0292741005087307 -0.041280769252073"/>
+      <mass value="1.09515454908799"/>
+      <inertia ixx="0.00575817488413533" ixy="4.92454490330888E-07" ixz="-5.75758988171004E-07" iyy="0.00452592941277235" iyz="0.00135206824645357" izz="0.0058904584276842"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_2.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.980392156862745 0.980392156862745 0.470588235294118 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_2" type="revolute">
+    <origin rpy="1.57079632679 -0.0 0.0" xyz="0.0 -0.0 0.0"/>
+    <parent link="left_link_1"/>
+    <child link="left_link_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="235" lower="-1.57" upper="1.57" velocity="2.618"/>
+  </joint>
+  <link name="left_link_3">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="0.0114318213510691 -0.0101707598694861 0.15131695375217"/>
+      <mass value="2.01686690128149"/>
+      <inertia ixx="0.0362470020041464" ixy="-0.00099203786071914" ixz="-0.00494440140493448" iyy="0.0374857206758098" iyz="-0.00313859974095155" izz="0.00905850119342719"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_3.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_3" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="0.0 -0.4586 -2.24557565126e-12"/>
+    <parent link="left_link_2"/>
+    <child link="left_link_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="111" lower="-3.12" upper="3.12" velocity="3.1416"/>
+  </joint>
+  <link name="left_link_4">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0240716370537192 -0.0235631728011761 -0.0366858174253844"/>
+      <mass value="0.849743349506889"/>
+      <inertia ixx="0.00313444335639628" ixy="-0.000681243351041131" ixz="0.000725380047812207" iyy="0.00333717642442852" iyz="0.000771057559109157" izz="0.0034847726349841"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_4.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_4" type="revolute">
+    <origin rpy="1.57079632679 -0.0 0.0" xyz="0.065 -0.0 0.0"/>
+    <parent link="left_link_3"/>
+    <child link="left_link_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="111" lower="0" upper="3.05" velocity="3.1416"/>
+  </joint>
+  <link name="left_link_5">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="-0.00867148011164554 0.0383499684802812 0.188626"/>
+      <mass value="1.20580396965245"/>
+      <inertia ixx="0.0218436427570802" ixy="-0.000309747330693722" ixz="0.00089039094846826" iyy="0.0205896836785318" iyz="0.00493573923914426" izz="0.00372270106038425"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 -0.02162"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_5.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 -0.02162"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_5" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="-0.0528 -0.4554 -2.22990656691e-12"/>
+    <parent link="left_link_4"/>
+    <child link="left_link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="3.12" velocity="2.618"/>
+  </joint>
+  <link name="left_link_6">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="0.045897226241036 0.00848579821002571 -0.0078257811617596"/>
+      <mass value="0.847157564562275"/>
+      <inertia ixx="0.00286926864109097" ixy="-0.000341664135091818" ixz="-0.000318082297486923" iyy="0.0043294660443987" iyz="-5.82962380662208E-05" izz="0.00437292566725527"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_6.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.980392156862745 0.980392156862745 0.470588235294118 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_6.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_6" type="revolute">
+    <origin rpy="1.57079632679 -1.0206823934513925e-11 -3.141592653589793" xyz="-0.0122 0.0 0.0"/>
+    <parent link="left_link_5"/>
+    <child link="left_link_6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="0.52" velocity="2.618"/>
+  </joint>
+  <link name="left_link_7">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.00117005127509708 5.03191940906655E-06 0.0151381784822231"/>
+      <mass value="0.233956150459573"/>
+      <inertia ixx="0.000142027360977168" ixy="1.76426389345981E-08" ixz="2.14635741626268E-07" iyy="0.000134421724783865" iyz="-1.29988689037464E-09" izz="0.000240242798572463"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_7.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_7.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_joint_7" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="0.087 -0.1169 -5.72411237751e-13"/>
+    <parent link="left_link_6"/>
+    <child link="left_link_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="3.12" velocity="3.1416"/>
+  </joint>
+  <link name="left_link_7_fake">
+  </link>
+  <joint name="left_link_7_to_link_7_fake" type="fixed">
+    <parent link="left_link_7" />
+    <child link="left_link_7_fake" />
+    <origin rpy="3.1415926 0 0" xyz="0 0 0" />
+  </joint>
+  <link name="left_forearm">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.09"/>
+      <mass value="3.0"/>
+
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="shadow_forearm_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/forearm.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.09"/>
+      <geometry name="shadow_forearm_collision">
+        <cylinder length="0.180" radius="0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_forearm" type="fixed">
+    <parent link="left_link_7_fake" />
+    <child link="left_forearm" />
+    <!-- <origin rpy="-1.57 0 0" xyz="0 0 -0.05" /> -->
+      <origin rpy="0 0 0" xyz="0 0 0.05" />
+  </joint>
+  <link name="left_wrist">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0.0 0.0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.120" ixy="0.0" ixz="0.0" iyy="0.148" iyz="0.0" izz="0.0438"/>
+
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wrist_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/wrist.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wrist_collision_geom">
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_WRJ2" type="revolute">
+    <parent link="left_forearm"/>
+    <child link="left_wrist"/>
+      <!-- <origin rpy="0 0 -3.14" xyz="0 -0.010  0.213"/> -->
+    <origin rpy="0 0 0" xyz="0 -0.010 0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="5" lower="-0.52359877559829882" upper="0.17453292519943295" velocity="1.0"/>
+    <dynamics damping="100.5"/>
+  </joint>
+  <link name="left_palm">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.035"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.5" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="0.3"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="palm_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/palm.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.005 0 0.035"/>
+      <geometry name="palm_collision_geom">
+        <box size="0.05 0.02 0.07"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_WRJ1" type="revolute">
+    <parent link="left_wrist"/>
+    <child link="left_palm"/>
+    <origin rpy="0 0 0" xyz="0 0 0.034"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="5" lower="-0.78539816339744828" upper="0.6108652381980153" velocity="1.0"/>
+    <dynamics damping="100.5"/>
+  </joint>
+  <link name="left_ffknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_FFJ4" type="revolute">
+    <parent link="left_palm"/>
+    <child link="left_ffknuckle"/>
+    <origin rpy="0 0 0" xyz="0.033 0 0.095"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_ffproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_FFJ3" type="revolute">
+    <parent link="left_ffknuckle"/>
+    <child link="left_ffproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_ffmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_FFJ2" type="revolute">
+    <parent link="left_ffproximal"/>
+    <child link="left_ffmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_ffdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_FFJ1" type="revolute">
+    <parent link="left_ffmiddle"/>
+    <child link="left_ffdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_fftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="left_FFtip" type="fixed">
+    <parent link="left_ffdistal"/>
+    <child link="left_fftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="left_mfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_MFJ4" type="revolute">
+    <parent link="left_palm"/>
+    <child link="left_mfknuckle"/>
+    <origin rpy="0 0 0" xyz="0.011 0 0.099"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_mfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_MFJ3" type="revolute">
+    <parent link="left_mfknuckle"/>
+    <child link="left_mfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_mfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_MFJ2" type="revolute">
+    <parent link="left_mfproximal"/>
+    <child link="left_mfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_mfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_MFJ1" type="revolute">
+    <parent link="left_mfmiddle"/>
+    <child link="left_mfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_mftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="left_MFtip" type="fixed">
+    <parent link="left_mfdistal"/>
+    <child link="left_mftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="left_rfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_RFJ4" type="revolute">
+    <parent link="left_palm"/>
+    <child link="left_rfknuckle"/>
+    <origin rpy="0 0 0" xyz="-0.011 0 0.095"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_rfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_RFJ3" type="revolute">
+    <parent link="left_rfknuckle"/>
+    <child link="left_rfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_rfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_RFJ2" type="revolute">
+    <parent link="left_rfproximal"/>
+    <child link="left_rfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_rfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_RFJ1" type="revolute">
+    <parent link="left_rfmiddle"/>
+    <child link="left_rfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_rftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="left_RFtip" type="fixed">
+    <parent link="left_rfdistal"/>
+    <child link="left_rftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="left_lfmetacarpal">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <mass value="0.075"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="lfmetacarpal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/lfmetacarpal.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry name="lfmetacarpal_collision_geom">
+        <box size="0.008 0.008 0.03"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_LFJ5" type="revolute">
+    <parent link="left_palm"/>
+    <child link="left_lfmetacarpal"/>
+    <origin rpy="0 0 0" xyz="-0.033 0 0.02071"/>
+    <axis xyz="0.573576436 0 0.819152044"/>
+    <limit effort="100" lower="0" upper="0.69813170079773179" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_lfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.06579"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_LFJ4" type="revolute">
+    <parent link="left_lfmetacarpal"/>
+    <child link="left_lfknuckle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.06579"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_lfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_LFJ3" type="revolute">
+    <parent link="left_lfknuckle"/>
+    <child link="left_lfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_lfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_LFJ2" type="revolute">
+    <parent link="left_lfproximal"/>
+    <child link="left_lfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_lfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_LFJ1" type="revolute">
+    <parent link="left_lfmiddle"/>
+    <child link="left_lfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_lftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="left_LFtip" type="fixed">
+    <parent link="left_lfdistal"/>
+    <child link="left_lftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="left_thbase">
+    <inertial>
+      <mass value="0.010"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thbase_visual">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="shadow_thbase_material">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0"/>
+      <geometry name="thbase_collision_geom">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_THJ5" type="revolute">
+    <parent link="left_palm"/>
+    <child link="left_thbase"/>
+    <origin rpy="0 0.785398163397 0" xyz="0.034 -0.0085 0.029"/>
+    <axis xyz="0 0 -1.0"/>
+    <limit effort="100" lower="-1.047" upper="1.047" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_thproximal">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.019"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thproximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/TH3_z.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thproximal_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.019"/>
+      <geometry name="thproximal_collision_geom">
+        <box size="0.008 0.008 0.020"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_THJ4" type="revolute">
+    <parent link="left_thbase"/>
+    <child link="left_thproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1.0 0 0"/>
+    <limit effort="100" lower="0" upper="1.309" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_thhub">
+    <inertial>
+      <mass value="0.002"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thhub_visual">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="shadow_thhub_material">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0"/>
+      <geometry name="thhub_collision_geom">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_THJ3" type="revolute">
+    <parent link="left_thproximal"/>
+    <child link="left_thhub"/>
+    <origin rpy="0 0 0" xyz="0 0 0.038"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="-0.2618" upper="0.2618" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_thmiddle">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.016"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thmiddle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/TH2_z.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thmiddle_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.016"/>
+      <geometry name="thmiddle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_THJ2" type="revolute">
+    <parent link="left_thhub"/>
+    <child link="left_thmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.5237" upper="0.5237" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_thdistal">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.01375"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.002 0.0025"/>
+      <geometry name="thdistal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thmiddle_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0.002 0.0025"/>
+      <geometry name="thmiddle_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_THJ1" type="revolute">
+    <parent link="left_thmiddle"/>
+    <child link="left_thdistal"/>
+    <origin rpy="0 0 -1.570796327" xyz="0 0 0.032"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.571" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="left_thtip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="left_thtip" type="fixed">
+    <parent link="left_thdistal"/>
+    <child link="left_thtip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0275"/>
+  </joint>
+  <joint name="body_to_right" type="fixed">
+    <origin rpy="1.5652925671162337 0 0.227" xyz="0 -0.1 1.45"/>
+    <parent link="body"/>
+    <child link="right_base"/>
+    <axis xyz="0 0 0"/>
+    <limit effort="235" lower="-1.57" upper="1.57" velocity="2.618"/>
+  </joint>
+  <link name="right_base">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.00153097191906452 0.00152031034664837 0.0524230280849149"/>
+      <mass value="1.33110743457779"/>
+      <inertia ixx="0.00695879790529406" ixy="9.99328685258342E-05" ixz="7.99577031212481E-05" iyy="0.00695365531716522" iyz="7.90796997368543E-05" izz="0.00729823323321907"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/base.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.796078431372549 0.823529411764706 0.937254901960784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/base.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="right_link_1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="5.5234067920554E-05  -0.0254878204920178 0.0355441421264809"/>
+      <mass value="1.09025546409174"/>
+      <inertia ixx="0.00585031196428369" ixy="1.4630349447555E-07" ixz="1.35351687162397E-06" iyy="0.00645496952227061" iyz="-0.00104800484741808" izz="0.00459531291521244"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_1.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.796078431372549 0.823529411764706 0.937254901960784 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_1" type="revolute">
+    <origin rpy="-3.1415926535795866 0.0 -0.0" xyz="0.0 -2.9150689157e-12 0.2856"/>
+    <parent link="right_base"/>
+    <child link="right_link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="235" lower="-3.12" upper="3.12" velocity="2.618"/>
+  </joint>
+  <link name="right_link_2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-3.62724763868157E-06 -0.0292741005087307 -0.041280769252073"/>
+      <mass value="1.09515454908799"/>
+      <inertia ixx="0.00575817488413533" ixy="4.92454490330888E-07" ixz="-5.75758988171004E-07" iyy="0.00452592941277235" iyz="0.00135206824645357" izz="0.0058904584276842"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_2.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.980392156862745 0.980392156862745 0.470588235294118 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_2" type="revolute">
+    <origin rpy="1.57079632679 -0.0 0.0" xyz="0.0 -0.0 0.0"/>
+    <parent link="right_link_1"/>
+    <child link="right_link_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="235" lower="-1.57" upper="1.57" velocity="2.618"/>
+  </joint>
+  <link name="right_link_3">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="0.0114318213510691 -0.0101707598694861 0.15131695375217"/>
+      <mass value="2.01686690128149"/>
+      <inertia ixx="0.0362470020041464" ixy="-0.00099203786071914" ixz="-0.00494440140493448" iyy="0.0374857206758098" iyz="-0.00313859974095155" izz="0.00905850119342719"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_3.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_3.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_3" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="0.0 -0.4586 -2.24557565126e-12"/>
+    <parent link="right_link_2"/>
+    <child link="right_link_3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="111" lower="-3.12" upper="3.12" velocity="3.1416"/>
+  </joint>
+  <link name="right_link_4">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.0240716370537192 -0.0235631728011761 -0.0366858174253844"/>
+      <mass value="0.849743349506889"/>
+      <inertia ixx="0.00313444335639628" ixy="-0.000681243351041131" ixz="0.000725380047812207" iyy="0.00333717642442852" iyz="0.000771057559109157" izz="0.0034847726349841"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_4.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_4.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_4" type="revolute">
+    <origin rpy="1.57079632679 -0.0 0.0" xyz="0.065 -0.0 0.0"/>
+    <parent link="right_link_3"/>
+    <child link="right_link_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="111" lower="0" upper="3.05" velocity="3.1416"/>
+  </joint>
+  <link name="right_link_5">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="-0.00867148011164554 0.0383499684802812 0.188626"/>
+      <mass value="1.20580396965245"/>
+      <inertia ixx="0.0218436427570802" ixy="-0.000309747330693722" ixz="0.00089039094846826" iyy="0.0205896836785318" iyz="0.00493573923914426" izz="0.00372270106038425"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 -0.02162"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_5.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 0" xyz="0 0 -0.02162"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_5.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_5" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="-0.0528 -0.4554 -2.22990656691e-12"/>
+    <parent link="right_link_4"/>
+    <child link="right_link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="3.12" velocity="2.618"/>
+  </joint>
+  <link name="right_link_6">
+    <inertial>
+      <origin rpy="0 3.1415926531795866 3.1415926531795866" xyz="0.045897226241036 0.00848579821002571 -0.0078257811617596"/>
+      <mass value="0.847157564562275"/>
+      <inertia ixx="0.00286926864109097" ixy="-0.000341664135091818" ixz="-0.000318082297486923" iyy="0.0043294660443987" iyz="-5.82962380662208E-05" izz="0.00437292566725527"/>
+    </inertial>
+    <visual>
+      <origin rpy="3.1415926531795866 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_6.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.980392156862745 0.980392156862745 0.470588235294118 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="3.1415926531795866 0 3.14159265359" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_6.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_6" type="revolute">
+    <origin rpy="1.57079632679 -1.0206823934513925e-11 -3.141592653589793" xyz="-0.0122 0.0 0.0"/>
+    <parent link="right_link_5"/>
+    <child link="right_link_6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="0.52" velocity="2.618"/>
+  </joint>
+  <link name="right_link_7">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.00117005127509708 5.03191940906655E-06 0.0151381784822231"/>
+      <mass value="0.233956150459573"/>
+      <inertia ixx="0.000142027360977168" ixy="1.76426389345981E-08" ixz="2.14635741626268E-07" iyy="0.000134421724783865" iyz="-1.29988689037464E-09" izz="0.000240242798572463"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/visual/link_7.obj"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.898039215686275 0.917647058823529 0.929411764705882 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/collision/link_7.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_joint_7" type="revolute">
+    <origin rpy="-1.57079632679 0.0 0.0" xyz="0.087 -0.1169 -5.72411237751e-13"/>
+    <parent link="right_link_6"/>
+    <child link="right_link_7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="54" lower="-3.12" upper="3.12" velocity="3.1416"/>
+  </joint>
+  <link name="right_link_7_fake">
+  </link>
+  <joint name="right_link_7_to_link_7_fake" type="fixed">
+    <parent link="right_link_7" />
+    <child link="right_link_7_fake" />
+    <origin rpy="3.1415926 0 0" xyz="0 0 0" />
+  </joint>
+  <link name="right_forearm">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.09"/>
+      <!-- <mass value="3.0"/> -->
+      <mass value="3.0"/>
+
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="shadow_forearm_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/forearm.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.09"/>
+      <geometry name="shadow_forearm_collision">
+        <cylinder length="0.180" radius="0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_forearm" type="fixed">
+    <parent link="right_link_7_fake" />
+    <child link="right_forearm" />
+    <!-- <origin rpy="-1.57 0 0" xyz="0 0 -0.05" /> -->
+      <origin rpy="0 0 0" xyz="0 0 0.05" />
+  </joint>
+  <link name="right_wrist">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0.0 0.0"/>
+      <mass value="0.1"/>
+      <!-- <inertia ixx="0.120" ixy="0.0" ixz="0.0" iyy="0.148" iyz="0.0" izz="0.0438"/> -->
+      <inertia ixx="0.120" ixy="0.0" ixz="0.0" iyy="0.148" iyz="0.0" izz="0.0438"/>
+
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wrist_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/wrist.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wrist_collision_geom">
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_WRJ2" type="revolute">
+    <parent link="right_forearm"/>
+    <child link="right_wrist"/>
+      <!-- <origin rpy="0 0 -3.14" xyz="0 -0.010  0.213"/> -->
+    <origin rpy="0 0 0" xyz="0 -0.010 0.213"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="5" lower="-0.52359877559829882" upper="0.17453292519943295" velocity="1.0"/>
+    <dynamics damping="100.5"/>
+  </joint>
+  <link name="right_palm">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.035"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.5" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="0.3"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="palm_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/palm.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.005 0 0.035"/>
+      <geometry name="palm_collision_geom">
+        <box size="0.05 0.02 0.07"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_WRJ1" type="revolute">
+    <parent link="right_wrist"/>
+    <child link="right_palm"/>
+    <origin rpy="0 0 0" xyz="0 0 0.034"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="5" lower="-0.78539816339744828" upper="0.6108652381980153" velocity="1.0"/>
+    <dynamics damping="100.5"/>
+  </joint>
+  <link name="right_ffknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_FFJ4" type="revolute">
+    <parent link="right_palm"/>
+    <child link="right_ffknuckle"/>
+    <origin rpy="0 0 0" xyz="0.033 0 0.095"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_ffproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_FFJ3" type="revolute">
+    <parent link="right_ffknuckle"/>
+    <child link="right_ffproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_ffmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_FFJ2" type="revolute">
+    <parent link="right_ffproximal"/>
+    <child link="right_ffmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_ffdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_FFJ1" type="revolute">
+    <parent link="right_ffmiddle"/>
+    <child link="right_ffdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_fftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="right_FFtip" type="fixed">
+    <parent link="right_ffdistal"/>
+    <child link="right_fftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="right_mfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_MFJ4" type="revolute">
+    <parent link="right_palm"/>
+    <child link="right_mfknuckle"/>
+    <origin rpy="0 0 0" xyz="0.011 0 0.099"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_mfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_MFJ3" type="revolute">
+    <parent link="right_mfknuckle"/>
+    <child link="right_mfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_mfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_MFJ2" type="revolute">
+    <parent link="right_mfproximal"/>
+    <child link="right_mfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_mfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_MFJ1" type="revolute">
+    <parent link="right_mfmiddle"/>
+    <child link="right_mfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_mftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="right_MFtip" type="fixed">
+    <parent link="right_mfdistal"/>
+    <child link="right_mftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="right_rfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.0005"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_RFJ4" type="revolute">
+    <parent link="right_palm"/>
+    <child link="right_rfknuckle"/>
+    <origin rpy="0 0 0" xyz="-0.011 0 0.095"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_rfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_RFJ3" type="revolute">
+    <parent link="right_rfknuckle"/>
+    <child link="right_rfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_rfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_RFJ2" type="revolute">
+    <parent link="right_rfproximal"/>
+    <child link="right_rfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_rfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_RFJ1" type="revolute">
+    <parent link="right_rfmiddle"/>
+    <child link="right_rfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_rftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="right_RFtip" type="fixed">
+    <parent link="right_rfdistal"/>
+    <child link="right_rftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="right_lfmetacarpal">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <mass value="0.075"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="lfmetacarpal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/lfmetacarpal.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.04"/>
+      <geometry name="lfmetacarpal_collision_geom">
+        <box size="0.008 0.008 0.03"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_LFJ5" type="revolute">
+    <parent link="right_palm"/>
+    <child link="right_lfmetacarpal"/>
+    <origin rpy="0 0 0" xyz="-0.033 0 0.02071"/>
+    <axis xyz="0.573576436 0 0.819152044"/>
+    <limit effort="100" lower="0" upper="0.69813170079773179" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_lfknuckle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.06579"/>
+      <mass value="0.008"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/knuckle.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="LightGrey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="knuckle_collision_geom">
+        <box size="0.005 0.005 0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_LFJ4" type="revolute">
+    <parent link="right_lfmetacarpal"/>
+    <child link="right_lfknuckle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.06579"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="100" lower="-0.43633231299858238" upper="0.43633231299858238" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_lfproximal">
+    <inertial>
+      <mass value="0.014"/>
+      <origin xyz="0 0 0.0225"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="proximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F3.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.025"/>
+      <geometry name="proximal_collision_geom">
+        <box size="0.008 0.008 0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_LFJ3" type="revolute">
+    <parent link="right_lfknuckle"/>
+    <child link="right_lfproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_lfmiddle">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <mass value="0.012"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="middle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F2.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0125"/>
+      <geometry name="middle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_LFJ2" type="revolute">
+    <parent link="right_lfproximal"/>
+    <child link="right_lfmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0.045"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_lfdistal">
+    <inertial>
+      <mass value="0.010"/>
+      <origin xyz="0 0 0.013"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="distal_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/F1.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_LFJ1" type="revolute">
+    <parent link="right_lfmiddle"/>
+    <child link="right_lfdistal"/>
+    <origin rpy="0 0 0" xyz="0 0 0.025"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.57079632679" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_lftip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="right_LFtip" type="fixed">
+    <parent link="right_lfdistal"/>
+    <child link="right_lftip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.026"/>
+  </joint>
+  <link name="right_thbase">
+    <inertial>
+      <mass value="0.010"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thbase_visual">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="shadow_thbase_material">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0"/>
+      <geometry name="thbase_collision_geom">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_THJ5" type="revolute">
+    <parent link="right_palm"/>
+    <child link="right_thbase"/>
+    <origin rpy="0 0.785398163397 0" xyz="0.034 -0.0085 0.029"/>
+    <axis xyz="0 0 -1.0"/>
+    <limit effort="100" lower="-1.047" upper="1.047" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_thproximal">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.019"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thproximal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/TH3_z.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thproximal_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.019"/>
+      <geometry name="thproximal_collision_geom">
+        <box size="0.008 0.008 0.020"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_THJ4" type="revolute">
+    <parent link="right_thbase"/>
+    <child link="right_thproximal"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1.0 0 0"/>
+    <limit effort="100" lower="0" upper="1.309" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_thhub">
+    <inertial>
+      <mass value="0.002"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thhub_visual">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="shadow_thhub_material">
+        <color rgba="0.7 0.7 0.7 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0"/>
+      <geometry name="thhub_collision_geom">
+        <box size="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_THJ3" type="revolute">
+    <parent link="right_thproximal"/>
+    <child link="right_thhub"/>
+    <origin rpy="0 0 0" xyz="0 0 0.038"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="-0.2618" upper="0.2618" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_thmiddle">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.016"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="thmiddle_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/TH2_z.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thmiddle_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0 0.016"/>
+      <geometry name="thmiddle_collision_geom">
+        <box size="0.008 0.008 0.015"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_THJ2" type="revolute">
+    <parent link="right_thhub"/>
+    <child link="right_thmiddle"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="100" lower="-0.5237" upper="0.5237" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_thdistal">
+    <inertial>
+      <mass value="0.016"/>
+      <origin rpy="0 0 0" xyz="0 0 0.01375"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.002 0.0025"/>
+      <geometry name="thdistal_visual">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+      <material name="shadow_thmiddle_material">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0 " xyz="0 0.002 0.0025"/>
+      <geometry name="thmiddle_collision_geom">
+        <mesh filename="/home/soumya.mondal/Desktop/Projects/ArnieCombined/Assets/meshes/distal_ellipsoid.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_THJ1" type="revolute">
+    <parent link="right_thmiddle"/>
+    <child link="right_thdistal"/>
+    <origin rpy="0 0 -1.570796327" xyz="0 0 0.032"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="100" lower="0" upper="1.571" velocity="1.0"/>
+    <dynamics damping="50.5"/>
+  </joint>
+  <link name="right_thtip">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="right_thtip" type="fixed">
+    <parent link="right_thdistal"/>
+    <child link="right_thtip"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0275"/>
+  </joint>
+</robot>
+

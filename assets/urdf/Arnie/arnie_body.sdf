@@ -1,0 +1,27 @@
+<sdf version='1.6'>
+  <model name='arnie_body'>
+    <link name='base'>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>1.33111</mass>
+        <inertia>
+          <ixx>0.0069588</ixx>
+          <ixy>9.99329e-05</ixy>
+          <ixz>7.99577e-05</ixz>
+          <iyy>0.00695366</iyy>
+          <iyz>7.90797e-05</iyz>
+          <izz>0.00729823</izz>
+        </inertia>
+      </inertial>
+      <visual name='base_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://arnie/meshes/visual/stl/arnie_body.stl</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
