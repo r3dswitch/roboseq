@@ -1,0 +1,82 @@
+<?xml version="0.0" ?>
+<!-- <material name="cup_material">
+  <texture filename="texture_image.png"/>
+</material> -->
+<robot name="cup">
+	<link name="base"/>
+	<joint name="j1" type="fixed">
+    <parent link="base"/>
+    <child link="cup_1"/>
+    <origin xyz="0  0  0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  	</joint>
+	<link name="cup_1">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="0.10000"/>
+			<inertia ixx="0.00000" ixy="0" ixz="0" iyy="0.00000" iyz="0" izz="0.00000"/>
+		</inertial>
+		<visual>
+      		<origin rpy="-0.00138374  0.01831255  0.03002321" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="1.obj"/>
+      		</geometry>
+    	</visual>
+		<collision>
+      		<origin rpy="0 0 0" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="1.obj"/>
+      		</geometry>
+    	</collision>
+	</link>
+	<joint name="j2" type="fixed">
+    <parent link="base"/>
+    <child link="cup_2"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  	</joint>
+	<link name="cup_2">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="0.10000"/>
+			<inertia ixx="0.00000" ixy="0" ixz="0" iyy="0.00000" iyz="0" izz="0.00000"/>
+		</inertial>
+		<visual>
+      		<origin rpy="0.0021297   0.01365753 -0.03748605" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="2.obj"/>
+      		</geometry>
+    	</visual>
+		<collision>
+      		<origin rpy="0 0 0" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="2.obj"/>
+      		</geometry>
+    	</collision>
+	</link>
+	<joint name="j3" type="fixed">
+    <parent link="base"/>
+    <child link="cup_3"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  	</joint>
+	<link name="cup_3">
+		<inertial>
+			<origin rpy="0.00000 -0.00000 0.00000" xyz="0.00000 0.00000 0.00000"/>
+			<mass value="0.10000"/>
+			<inertia ixx="0.00000" ixy="0" ixz="0" iyy="0.00000" iyz="0" izz="0.00000"/>
+		</inertial>
+		<visual>
+      		<origin rpy="0.0013325  -0.06315503 -0.03840058" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="3.obj"/>
+      		</geometry>
+    	</visual>
+		<collision>
+      		<origin rpy="0 0 0" xyz="0 0 0"/>
+      		<geometry>
+        		<mesh filename="3.obj"/>
+      		</geometry>
+    	</collision>
+	</link>
+</robot>
