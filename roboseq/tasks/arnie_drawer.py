@@ -1,12 +1,12 @@
 import numpy as np
+import torch
 
 from roboseq.utils.torch_jit_utils import *
 from roboseq.tasks.hand_base.base_task import BaseTask
+
 from isaacgym import gymtorch
 from isaacgym import gymapi
 
-import torch
-import logging
 from PIL import Image
 import open3d as o3d
 
@@ -14,7 +14,6 @@ def iprint(*strings):
     print(strings)
     exit()
     return
-
 
 class ArnieDrawer(BaseTask):
     def __init__(
@@ -76,7 +75,7 @@ class ArnieDrawer(BaseTask):
         self.ignore_z = False
 
         self.obs_type = self.cfg["env"]["observationType"]
-        self.num_obs_dict = {"full_state": 453} #453
+        self.num_obs_dict = {"full_state": 2697} #453
         self.num_hand_obs = 72 + 95 + 26 + 6
         self.up_axis = "z"
         self.fingertips = [
@@ -111,12 +110,18 @@ class ArnieDrawer(BaseTask):
 
         super().__init__(cfg=self.cfg)
 
-        actor_root_state_tensor = self.gym.acquire_actor_root_state_tensor(self.sim)  # (2,13)
+        actor_root_state_tensor = self.gym.acquire_actor_root_state_tensor(
+            self.sim
+        )  # (2,13)
         dof_state_tensor = self.gym.acquire_dof_state_tensor(self.sim)  # (68,2)
-        rigid_body_tensor = self.gym.acquire_rigid_body_state_tensor(self.sim)  # (88,13)
+        rigid_body_tensor = self.gym.acquire_rigid_body_state_tensor(
+            self.sim
+        )  # (88,13)
         dof_force_tensor = self.gym.acquire_dof_force_tensor(self.sim)  # (68,)
 
-        self.dof_force_tensor = gymtorch.wrap_tensor(dof_force_tensor).view(self.num_envs, self.num_arnie_dofs + self.num_object_dofs)
+        self.dof_force_tensor = gymtorch.wrap_tensor(dof_force_tensor).view(
+            self.num_envs, self.num_arnie_dofs + self.num_object_dofs
+        )
 
         self.gym.refresh_actor_root_state_tensor(self.sim)
         self.gym.refresh_dof_state_tensor(self.sim)
@@ -124,7 +129,9 @@ class ArnieDrawer(BaseTask):
 
         self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
 
-        self.arnie_dof_state = self.dof_state.view(self.num_envs, -1, 2)[:, : self.num_arnie_dofs]
+        self.arnie_dof_state = self.dof_state.view(self.num_envs, -1, 2)[
+            :, : self.num_arnie_dofs
+        ]
         self.arnie_dof_pos = self.arnie_dof_state[..., 0]
         self.arnie_dof_vel = self.arnie_dof_state[..., 1]
 
@@ -138,60 +145,10 @@ class ArnieDrawer(BaseTask):
 
         self.arnie_default_dof_pos = to_torch(
             [
-                -0.4,
-                1.57,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0.5,
-                1.57,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
+                -0.4,1.57,0,0,0,0,0, # left arm
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, # left hand
+                0.5,1.57,0,0,0,0,0, # right arm
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, # right hand
             ],
             dtype=torch.float,
             device=self.device,
@@ -210,13 +167,40 @@ class ArnieDrawer(BaseTask):
         self.num_bodies = self.rigid_body_states.shape[1]
 
         self.num_dofs = self.gym.get_sim_dof_count(self.sim) // self.num_envs
-        self.prev_targets = torch.zeros((self.num_envs, self.num_dofs), dtype=torch.float, device=self.device)
-        self.cur_targets = torch.zeros((self.num_envs, self.num_dofs), dtype=torch.float, device=self.device)
+        self.prev_targets = torch.zeros(
+            (self.num_envs, self.num_dofs), dtype=torch.float, device=self.device
+        )
+        self.cur_targets = torch.zeros(
+            (self.num_envs, self.num_dofs), dtype=torch.float, device=self.device
+        )
 
-        self.global_indices = torch.arange(self.num_envs * 3, dtype=torch.int32, device=self.device).view(self.num_envs, -1)
+        self.global_indices = torch.arange(
+            self.num_envs * 3, dtype=torch.int32, device=self.device
+        ).view(self.num_envs, -1)
+        self.x_unit_tensor = to_torch(
+            [1, 0, 0], dtype=torch.float, device=self.device
+        ).repeat((self.num_envs, 1))
+        self.y_unit_tensor = to_torch(
+            [0, 1, 0], dtype=torch.float, device=self.device
+        ).repeat((self.num_envs, 1))
+        self.z_unit_tensor = to_torch(
+            [0, 0, 1], dtype=torch.float, device=self.device
+        ).repeat((self.num_envs, 1))
 
-        self.successes = torch.zeros(self.num_envs, dtype=torch.float, device=self.device)
-        self.consecutive_successes = torch.zeros(1, dtype=torch.float, device=self.device)
+        self.successes = torch.zeros(
+            self.num_envs, dtype=torch.float, device=self.device
+        )
+        self.consecutive_successes = torch.zeros(
+            1, dtype=torch.float, device=self.device
+        )
+
+        self.av_factor = to_torch(self.av_factor, dtype=torch.float, device=self.device)
+        self.apply_forces = torch.zeros(
+            (self.num_envs, self.num_bodies, 3), device=self.device, dtype=torch.float
+        )
+        self.apply_torque = torch.zeros(
+            (self.num_envs, self.num_bodies, 3), device=self.device, dtype=torch.float
+        )
 
         self.total_successes = 0
         self.total_resets = 0
@@ -231,9 +215,10 @@ class ArnieDrawer(BaseTask):
             self.physics_engine,
             self.sim_params,
         )
-
         self._create_ground_plane()
-        self._create_envs(self.num_envs, self.cfg["env"]["envSpacing"], int(np.sqrt(self.num_envs)))
+        self._create_envs(
+            self.num_envs, self.cfg["env"]["envSpacing"], int(np.sqrt(self.num_envs))
+        )
 
     def _create_ground_plane(self):
         plane_params = gymapi.PlaneParams()
@@ -258,18 +243,28 @@ class ArnieDrawer(BaseTask):
         arnie_asset_file = "urdf/ArnieHIT/arnie_fxd.urdf"
         object_asset_file = "urdf/cup/cup.urdf"
         table_asset_file = "urdf/square_table.urdf"
-        
         asset_options = gymapi.AssetOptions()
         asset_options.disable_gravity = True
         asset_options.fix_base_link = True
         asset_options.vhacd_enabled = False
         asset_options.use_mesh_materials = True
         asset_options.vhacd_params = gymapi.VhacdParams()
-        asset_options.vhacd_params.resolution = 1
+        asset_options.vhacd_params.resolution = 1000
+        asset_options.vhacd_params.concavity = 0.0025
+        asset_options.vhacd_params.alpha = 0.04
+        asset_options.vhacd_params.beta = 1.0
+        asset_options.vhacd_params.convex_hull_downsampling = 4
+        asset_options.vhacd_params.max_num_vertices_per_ch = 256
 
-        arnie_asset = self.gym.load_asset(self.sim, asset_root, arnie_asset_file, asset_options)
-        object_asset = self.gym.load_asset(self.sim, asset_root, object_asset_file, asset_options)
-        table_asset = self.gym.load_asset(self.sim, asset_root, table_asset_file, asset_options)
+        arnie_asset = self.gym.load_asset(
+            self.sim, asset_root, arnie_asset_file, asset_options
+        )
+        object_asset = self.gym.load_asset(
+            self.sim, asset_root, object_asset_file, asset_options
+        )
+        table_asset = self.gym.load_asset(
+            self.sim, asset_root, table_asset_file, asset_options
+        )
 
         arnie_dof_props = self.gym.get_asset_dof_properties(arnie_asset)
         object_dof_props = self.gym.get_asset_dof_properties(object_asset)
@@ -304,6 +299,30 @@ class ArnieDrawer(BaseTask):
             self.gym.find_asset_rigid_body_index(arnie_asset, name)
             for name in self.fingertips
         ]
+
+        """Test Block"""
+        
+        self.cameras = []
+        self.camera_tensors = []
+        self.camera_view_matrixs = []
+        self.camera_proj_matrixs = []
+
+        self.camera_props = gymapi.CameraProperties()
+        self.camera_props.width = 128
+        self.camera_props.height = 128
+        self.camera_props.enable_tensors = True
+
+        self.env_origin = torch.zeros((self.num_envs, 3), device=self.device, dtype=torch.float)
+        self.pointCloudDownsampleNum = 768
+        
+        self.camera_u = torch.arange(0, self.camera_props.width, device=self.device)
+        self.camera_v = torch.arange(0, self.camera_props.height, device=self.device)
+
+        self.camera_v2, self.camera_u2 = torch.meshgrid(self.camera_v, self.camera_u, indexing="ij")
+        
+        self.o3d_pc = o3d.geometry.PointCloud()
+
+        """Ends Here"""
 
         self.left_hand_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"left_base_link")
         self.left_thumb_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"left_Thumb_Phadist")
@@ -356,6 +375,29 @@ class ArnieDrawer(BaseTask):
             self.hand_indices.append(hand_idx)
             self.env_indices.append(env_ptr)
 
+            """Test Starts Here"""
+
+            # camera_handle = self.gym.create_camera_sensor(env_ptr, self.camera_props)
+            # self.gym.set_camera_location(camera_handle, env_ptr, gymapi.Vec3(0.25, -0., 1.0), gymapi.Vec3(-0.24, -0., 0))
+            
+            # camera_tensor = self.gym.get_camera_image_gpu_tensor(self.sim, env_ptr, camera_handle, gymapi.IMAGE_DEPTH)
+            # torch_cam_tensor = gymtorch.wrap_tensor(camera_tensor)
+           
+            # cam_vinv = torch.inverse((torch.tensor(self.gym.get_camera_view_matrix(self.sim, env_ptr, camera_handle)))).to(self.device)
+            # cam_proj = torch.tensor(self.gym.get_camera_proj_matrix(self.sim, env_ptr, camera_handle), device=self.device)
+
+            # origin = self.gym.get_env_origin(env_ptr)
+            # self.env_origin[i][0] = origin.x
+            # self.env_origin[i][1] = origin.y
+            # self.env_origin[i][2] = origin.z
+
+            # self.camera_tensors.append(torch_cam_tensor)
+            # self.camera_view_matrixs.append(cam_vinv)
+            # self.camera_proj_matrixs.append(cam_proj)
+            # self.cameras.append(camera_handle)
+            
+            """Ends Here"""
+
         self.object_init_state = to_torch(
             self.object_init_state, device=self.device, dtype=torch.float
         ).view(self.num_envs, 13)
@@ -406,6 +448,12 @@ class ArnieDrawer(BaseTask):
         self.gym.refresh_force_sensor_tensor(self.sim)
         self.gym.refresh_dof_force_tensor(self.sim)
 
+        self.gym.simulate(self.sim)
+        self.gym.fetch_results(self.sim, True)
+        self.gym.step_graphics(self.sim)
+        self.gym.render_all_camera_sensors(self.sim)
+        self.gym.start_access_image_tensors(self.sim)
+
         self.object_pose = self.root_state_tensor[self.object_indices, 0:7]
         self.object_pos = self.root_state_tensor[self.object_indices, 0:3]
         self.object_rot = self.root_state_tensor[self.object_indices, 3:7]
@@ -449,7 +497,28 @@ class ArnieDrawer(BaseTask):
         self.fingertip_state = self.rigid_body_states[:, self.fingertip_handles][:, :, 0:13]
         self.fingertip_pos = self.rigid_body_states[:, self.fingertip_handles][:, :, 0:3]
 
-        self.compute_full_state()
+        # self.compute_full_state()
+        self.compute_pcd_observations()
+
+    def sample_points(self, points, sample_num=1000, sample_mathed="furthest"):
+        eff_points = points[points[:, 2] > 0.04]
+        if eff_points.shape[0] < sample_num:
+            eff_points = points
+        if sample_mathed == "random":
+            sampled_points = self.rand_row(eff_points, sample_num)
+        elif sample_mathed == "furthest":
+            sampled_points_id = pointnet2_utils.furthest_point_sample(
+                eff_points.reshape(1, *eff_points.shape), sample_num
+            )
+            sampled_points = eff_points.index_select(0, sampled_points_id[0].long())
+        return sampled_points
+
+    def rand_row(self, tensor, dim_needed):
+        row_total = tensor.shape[0]
+        return tensor[torch.randint(low=0, high=row_total, size=(dim_needed,)), :]
+
+    def compute_pcd_observations(self):
+        print("pcd")
 
     def compute_full_state(self, asymm_obs=False):
         num_ft_states = 13 * int(self.num_fingertips)  # 130
@@ -491,6 +560,7 @@ class ArnieDrawer(BaseTask):
         self.obs_buf[:, obj_obs_start + 22 : obj_obs_start + 25] = self.drawer_top_handle_pos
 
     def reset(self, env_ids):
+        o3d.visualization.draw_geometries([self.o3d_pc])
         # generate random floats for offsetting
         rand_floats = torch_rand_float(-1.0, 1.0, (len(env_ids), self.num_arnie_dofs + self.num_object_dofs), device=self.device)
         
@@ -572,14 +642,27 @@ class ArnieDrawer(BaseTask):
         self.cur_targets[:, :self.num_arnie_dofs] = self.act_moving_average * self.cur_targets[:, :self.num_arnie_dofs] + (1.0 - self.act_moving_average) * self.prev_targets[:, :self.num_arnie_dofs]
         self.cur_targets[:, :self.num_arnie_dofs] = tensor_clamp(self.cur_targets[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits)
 
+        big_idxs = [9]
+        small_idxs = [13]
+
+        for i in big_idxs:
+            self.apply_forces[:, i, :] = actions[:, i * 3 : i * 3 + 3] * self.dt * self.transition_scale * 100000
+            self.apply_torque[:, i, :] = self.actions[:, i * 3 : i * 3 + 3] * self.dt * self.orientation_scale * 1000
+
+        for i in small_idxs:
+            self.apply_forces[:, i, :] = actions[:, i * 3 : i * 3 + 3] * self.dt * self.transition_scale * 10
+            self.apply_torque[:, i, :] = self.actions[:, i * 3 : i * 3 + 3] * self.dt * self.orientation_scale * 0.1
+
+        self.gym.apply_rigid_body_force_tensors(self.sim, gymtorch.unwrap_tensor(self.apply_forces), gymtorch.unwrap_tensor(self.apply_torque), gymapi.ENV_SPACE)
+
         self.prev_targets[:, :self.num_arnie_dofs] = self.cur_targets[:, :self.num_arnie_dofs]
+        # self.render_img()
         
     def post_physics_step(self):
         self.progress_buf += 1
         self.randomize_buf += 1
 
         self.compute_observations()
-        self.compute_reward(self.actions)
 
 @torch.jit.script
 def compute_hand_reward(
@@ -648,3 +731,37 @@ def compute_hand_reward(
     ).mean()
 
     return reward, resets, progress_buf, successes, cons_successes
+
+@torch.jit.script
+def depth_image_to_point_cloud_GPU(camera_tensor, camera_view_matrix_inv, camera_proj_matrix, u, v, width:float, height:float, depth_bar:float, device:torch.device):
+    # time1 = time.time()
+    depth_buffer = camera_tensor.to(device)
+
+    # Get the camera view matrix and invert it to transform points from camera to world space
+    vinv = camera_view_matrix_inv
+
+    # Get the camera projection matrix and get the necessary scaling coefficients for deprojection
+    
+    proj = camera_proj_matrix
+    fu = 2/proj[0, 0]
+    fv = 2/proj[1, 1]
+
+    centerU = width/2
+    centerV = height/2
+
+    Z = depth_buffer
+    X = -(u-centerU)/width * Z * fu
+    Y = (v-centerV)/height * Z * fv
+
+    Z = Z.view(-1)
+    valid = Z > -depth_bar
+    X = X.view(-1)
+    Y = Y.view(-1)
+
+    position = torch.vstack((X, Y, Z, torch.ones(len(X), device=device)))[:, valid]
+    position = position.permute(1, 0)
+    position = position@vinv
+
+    points = position[:, 0:3]
+
+    return points
