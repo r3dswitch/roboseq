@@ -8,7 +8,6 @@
 
 # Arnie Tasks
 from roboseq.tasks.arnie_drawer import ArnieDrawer
-from roboseq.tasks.arnie_grasp_cube import ArnieGraspCube
 
 from roboseq.tasks.hand_base.vec_task import (
     VecTaskCPU,

@@ -69,29 +69,6 @@ def set_seed(seed, torch_deterministic=False):
 
 def retrieve_cfg(args, use_rlg_config=False):
     if args.task in [
-        "ArnieDoorOpenInward",
-        "ArnieGraspAndPlace",
-        "ArnieGraspCube",
-        "ShadowHandOver",
-        "ShadowHandCatchUnderarm",
-        "ShadowHandTwoCatchUnderarm",
-        "ShadowHandCatchAbreast",
-        "ShadowHandReOrientation",
-        "ShadowHandCatchOver2Underarm",
-        "ShadowHandBottleCap",
-        "ShadowHandDoorCloseInward",
-        "ShadowHandDoorCloseOutward",
-        "ShadowHandDoorOpenInward",
-        "ShadowHandDoorOpenOutward",
-        "ShadowHandKettle",
-        "ShadowHandPen",
-        "ShadowHandSwitch",
-        "ShadowHandPushBlock",
-        "ShadowHandSwingCup",
-        "ShadowHandGraspAndPlace",
-        "ShadowHandScissors",
-        "AllegroHandOver",
-        "AllegroHandCatchUnderarm",
         "ArnieDrawer"
     ]:
         return (
@@ -100,51 +77,6 @@ def retrieve_cfg(args, use_rlg_config=False):
             ),
             "cfg/{}/config.yaml".format(args.algo),
             "cfg/{}.yaml".format(args.task),
-        )
-
-    elif args.task in ["ShadowHandLiftUnderarm"]:
-        return (
-            os.path.join(
-                args.logdir, "{}/{}/{}".format(args.task, args.algo, args.algo)
-            ),
-            "cfg/{}/lift_config.yaml".format(args.algo),
-            "cfg/{}.yaml".format(args.task),
-        )
-
-    elif args.task in ["ShadowHandBlockStack"]:
-        return (
-            os.path.join(
-                args.logdir, "{}/{}/{}".format(args.task, args.algo, args.algo)
-            ),
-            "cfg/{}/stack_block_config.yaml".format(args.algo),
-            "cfg/{}.yaml".format(args.task),
-        )
-
-    elif args.task in ["ShadowHand", "ShadowHandReOrientation"]:
-        return (
-            os.path.join(
-                args.logdir, "{}/{}/{}".format(args.task, args.algo, args.algo)
-            ),
-            "cfg/{}/config.yaml".format(args.algo),
-            "cfg/{}.yaml".format(args.task),
-        )
-
-    elif args.task in ["ShadowHandMetaMT4", "ShadowHandMetaMT1"]:
-        return (
-            os.path.join(
-                args.logdir, "{}/{}/{}".format(args.task, args.algo, args.algo)
-            ),
-            "cfg/{}/config.yaml".format(args.algo),
-            "cfg/meta_env_cfg/{}.yaml".format(args.task),
-        )
-
-    elif args.task in ["ShadowHandMetaMT1"]:
-        return (
-            os.path.join(
-                args.logdir, "{}/{}/{}".format(args.task, args.algo, args.algo)
-            ),
-            "cfg/{}/config.yaml".format(args.algo),
-            "cfg/meta_env_cfg/{}.yaml".format(args.task),
         )
 
     else:
