@@ -99,6 +99,8 @@ class ArnieDrawer(BaseTask):
 
         num_states = 0
 
+        self.ctr = 0
+
         self.cfg["env"]["numObservations"] = self.num_obs_dict[self.obs_type]
         self.cfg["env"]["numStates"] = num_states
 
@@ -487,6 +489,12 @@ class ArnieDrawer(BaseTask):
         self.fingertip_pos = self.rigid_body_states[:, self.fingertip_handles][:, :, 0:3]
 
         self.compute_full_state()
+        
+        self.ctr+=1
+        
+        if self.ctr == 40: # 8 times in 0ne iteration, once every 5 iterations
+            self.render_point_cloud()
+            self.ctr = 0
 
     def compute_full_state(self, asymm_obs=False):
         num_ft_states = 13 * int(self.num_fingertips)  # 130
@@ -617,7 +625,6 @@ class ArnieDrawer(BaseTask):
 
         self.compute_observations()
         self.compute_reward(self.actions)
-        self.render_point_cloud()
 
     def rand_row(self, tensor, dim_needed):  
         row_total = tensor.shape[0]
