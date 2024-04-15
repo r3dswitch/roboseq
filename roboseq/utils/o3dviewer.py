@@ -6,7 +6,6 @@ class PointcloudVisualizer:
     def __init__(self) -> None:
         self.vis = o3d.visualization.Visualizer()
         self.vis.create_window()
-        # self.vis.register_key_callback(self.vis.get_key(), self.vis.update_renderer())
 
     def add_geometry(self, cloud):
         self.vis.add_geometry(cloud)
@@ -21,7 +20,7 @@ class PointcloudVisualizer:
 if __name__ == "__main__":
     visualizer = PointcloudVisualizer()
     cloud = o3d.io.read_point_cloud(
-        "/home/soumya.mondal/Desktop/Projects/DexterousHands/assets/laptop.ply"
+        "/home/soumya_mondal/Desktop/Projects/Thesis/roboseq/pcd.npy"
     )
     visualizer.add_geometry(cloud)
     visualizer.update(cloud)

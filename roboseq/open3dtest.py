@@ -1,38 +1,23 @@
 import open3d as o3d
 import numpy as np
+import time
 
-# Define vertices of the cube
-vertices = np.array([
-    [-0.5, -0.5, -0.5],
-    [-0.5, -0.5, 0.5],
-    [-0.5, 0.5, -0.5],
-    [-0.5, 0.5, 0.5],
-    [0.5, -0.5, -0.5],
-    [0.5, -0.5, 0.5],
-    [0.5, 0.5, -0.5],
-    [0.5, 0.5, 0.5]
-])
+if __name__ == "__main__":
+    points = o3d.io.read_point_cloud("/home/soumya_mondal/Desktop/Projects/Thesis/roboseq/pcd.ply")
 
-# Define the indices of the cube's faces
-faces = np.array([
-    [0, 1, 3],
-    [0, 2, 3],
-    [1, 5, 3],
-    [5, 7, 3],
-    [4, 5, 7],
-    [4, 6, 7],
-    [0, 4, 2],
-    [4, 6, 2],
-    [0, 1, 4],
-    [1, 5, 4],
-    [2, 3, 6],
-    [3, 7, 6]
-])
+    frame = o3d.geometry.TriangleMesh.create_coordinate_frame(1.0)
 
-# Create Open3D mesh object
-mesh = o3d.geometry.TriangleMesh()
-mesh.vertices = o3d.utility.Vector3dVector(vertices)
-mesh.triangles = o3d.utility.Vector3iVector(faces)
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+    vis.add_geometry(points)
+    vis.add_geometry(frame)
 
-# Visualize the mesh
-o3d.visualization.draw_geometries([mesh])
+    start_time = time.time()
+
+    while time.time()-start_time < 10:
+        vis.update_geometry(points)
+        vis.poll_events()
+        vis.update_renderer()
+        time.sleep(0.01)
+
+    vis.destroy_window()

@@ -8,7 +8,7 @@ from isaacgym import gymapi
 import torch
 import logging
 from PIL import Image
-# import open3d as o3d
+import open3d as o3d
 
 def iprint(*strings):
     print(strings)
@@ -304,6 +304,25 @@ class ArnieDrawer(BaseTask):
             self.gym.find_asset_rigid_body_index(arnie_asset, name)
             for name in self.fingertips
         ]
+        
+        """Test Code"""
+        self.cameras = []
+        self.camera_tensors = []
+        self.camera_view_matrixs = []
+        self.camera_proj_matrixs = []
+
+        self.camera_props = gymapi.CameraProperties()
+        self.camera_props.width = 256
+        self.camera_props.height = 256
+        self.camera_props.enable_tensors = True
+
+        self.env_origin = torch.zeros((self.num_envs, 3), device=self.device, dtype=torch.float)
+        self.pointCloudDownsampleNum = 4096
+        self.camera_u = torch.arange(0, self.camera_props.width, device=self.device)
+        self.camera_v = torch.arange(0, self.camera_props.height, device=self.device)
+
+        self.camera_v2, self.camera_u2 = torch.meshgrid(self.camera_v, self.camera_u, indexing='ij')
+        """Test Code Ends"""
 
         self.left_hand_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"left_base_link")
         self.left_thumb_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"left_Thumb_Phadist")
@@ -367,6 +386,24 @@ class ArnieDrawer(BaseTask):
         self.object_indices = to_torch(
             self.object_indices, dtype=torch.long, device=self.device
         )
+
+        """Test Code"""
+        camera_handle = self.gym.create_camera_sensor(env_ptr, self.camera_props)
+        self.gym.set_camera_location(camera_handle, env_ptr, gymapi.Vec3(1.9, 0, 1.8), gymapi.Vec3(0, 0, 0))  #0.785
+        camera_tensor = self.gym.get_camera_image_gpu_tensor(self.sim, env_ptr, camera_handle, gymapi.IMAGE_DEPTH)
+        torch_cam_tensor = gymtorch.wrap_tensor(camera_tensor)
+        cam_vinv = torch.inverse((torch.tensor(self.gym.get_camera_view_matrix(self.sim, env_ptr, camera_handle)))).to(self.device)
+        cam_proj = torch.tensor(self.gym.get_camera_proj_matrix(self.sim, env_ptr, camera_handle), device=self.device)
+
+        origin = self.gym.get_env_origin(env_ptr)
+        self.env_origin[i][0] = origin.x
+        self.env_origin[i][1] = origin.y
+        self.env_origin[i][2] = origin.z
+        self.camera_tensors.append(torch_cam_tensor)
+        self.camera_view_matrixs.append(cam_vinv)
+        self.camera_proj_matrixs.append(cam_proj)
+        self.cameras.append(camera_handle)
+        """Test Code Ends"""
 
     def compute_reward(self, actions):
         (
@@ -580,6 +617,46 @@ class ArnieDrawer(BaseTask):
 
         self.compute_observations()
         self.compute_reward(self.actions)
+        self.render_point_cloud()
+
+    def rand_row(self, tensor, dim_needed):  
+        row_total = tensor.shape[0]
+        return tensor[torch.randint(low=0, high=row_total, size=(dim_needed,)),:]
+
+    def sample_points(self, points, sample_num=1000, sample_mathed='furthest'):
+        eff_points = points[points[:, 2]>0.04]
+        if eff_points.shape[0] < sample_num :
+            eff_points = points
+        if sample_mathed == 'random':
+            sampled_points = self.rand_row(eff_points, sample_num)
+        elif sample_mathed == 'furthest':
+            sampled_points_id = pointnet2_utils.furthest_point_sample(eff_points.reshape(1, *eff_points.shape), sample_num)
+            sampled_points = eff_points.index_select(0, sampled_points_id[0].long())
+        return sampled_points
+
+    def render_point_cloud(self):
+        self.gym.render_all_camera_sensors(self.sim)
+        self.gym.start_access_image_tensors(self.sim)
+        point_clouds = torch.zeros((self.num_envs, self.pointCloudDownsampleNum, 3), device=self.device)
+        for i in range(self.num_envs):
+            # Here is an example. In practice, it's better not to convert tensor from GPU to CPU
+            points = depth_image_to_point_cloud_GPU(self.camera_tensors[i], self.camera_view_matrixs[i], self.camera_proj_matrixs[i], self.camera_u2, self.camera_v2, self.camera_props.width, self.camera_props.height, 10, self.device)
+            
+            if points.shape[0] > 0:
+                selected_points = self.sample_points(points, sample_num=self.pointCloudDownsampleNum, sample_mathed='random')
+            else:
+                selected_points = torch.zeros((self.num_envs, self.pointCloudDownsampleNum, 3), device=self.device)
+            
+            point_clouds[i] = selected_points
+        
+        # Create Open3D point cloud from numpy array
+        point_cloud = o3d.geometry.PointCloud()
+        point_cloud.points = o3d.utility.Vector3dVector(point_clouds[0, :, :3].cpu().numpy())
+
+        # Save the point cloud as a PLY file
+        o3d.io.write_point_cloud("pcd.ply", point_cloud)
+
+        self.gym.end_access_image_tensors(self.sim)
 
 @torch.jit.script
 def compute_hand_reward(
@@ -648,3 +725,38 @@ def compute_hand_reward(
     ).mean()
 
     return reward, resets, progress_buf, successes, cons_successes
+
+@torch.jit.script
+def depth_image_to_point_cloud_GPU(camera_tensor, camera_view_matrix_inv, camera_proj_matrix, u, v, width:float, height:float, depth_bar:float, device:torch.device):
+    # time1 = time.time()
+    depth_buffer = camera_tensor.to(device)
+
+    # Get the camera view matrix and invert it to transform points from camera to world space
+    vinv = camera_view_matrix_inv
+
+    # Get the camera projection matrix and get the necessary scaling
+    # coefficients for deprojection
+    
+    proj = camera_proj_matrix
+    fu = 2/proj[0, 0]
+    fv = 2/proj[1, 1]
+
+    centerU = width/2
+    centerV = height/2
+
+    Z = depth_buffer
+    X = -(u-centerU)/width * Z * fu
+    Y = (v-centerV)/height * Z * fv
+
+    Z = Z.view(-1)
+    valid = Z > -depth_bar
+    X = X.view(-1)
+    Y = Y.view(-1)
+
+    position = torch.vstack((X, Y, Z, torch.ones(len(X), device=device)))[:, valid]
+    position = position.permute(1, 0)
+    position = position@vinv
+
+    points = position[:, 0:3]
+
+    return points
