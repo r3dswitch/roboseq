@@ -2,10 +2,10 @@ import numpy as np
 
 from roboseq.utils.torch_jit_utils import *
 from roboseq.tasks.hand_base.base_task import BaseTask
-from isaacgym import gymtorch
-from isaacgym import gymapi
+from isaacgym import gymtorch # type: ignore
+from isaacgym import gymapi # type: ignore
 
-import torch
+import torch # type: ignore
 import logging
 from PIL import Image
 import open3d as o3d
@@ -139,7 +139,7 @@ class ArnieDrawer(BaseTask):
         self.object_dof_pos = self.object_dof_state[..., 0]
         self.object_dof_vel = self.object_dof_state[..., 1]
 
-        self.arnie_default_dof_pos = to_torch(
+        self.arnie_default_dof_pos = to_torch( # type: ignore
             [
                 -0.9,
                 1.57,
@@ -293,10 +293,10 @@ class ArnieDrawer(BaseTask):
             self.arnie_dof_default_pos.append(0.0)
             self.arnie_dof_default_vel.append(0.0)
 
-        self.arnie_dof_lower_limits = to_torch(self.arnie_dof_lower_limits, device=self.device)
-        self.arnie_dof_upper_limits = to_torch(self.arnie_dof_upper_limits, device=self.device)
-        self.arnie_dof_default_pos = to_torch(self.arnie_dof_default_pos, device=self.device)
-        self.arnie_dof_default_vel = to_torch(self.arnie_dof_default_vel, device=self.device)
+        self.arnie_dof_lower_limits = to_torch(self.arnie_dof_lower_limits, device=self.device) # type: ignore
+        self.arnie_dof_upper_limits = to_torch(self.arnie_dof_upper_limits, device=self.device) # type: ignore
+        self.arnie_dof_default_pos = to_torch(self.arnie_dof_default_pos, device=self.device) # type: ignore
+        self.arnie_dof_default_vel = to_torch(self.arnie_dof_default_vel, device=self.device) # type: ignore
 
         self.hand_indices = []
         self.object_indices = []
@@ -408,15 +408,15 @@ class ArnieDrawer(BaseTask):
             self.cameras.append(camera_handle)
             """Test Code Ends"""
 
-        self.object_init_state = to_torch(
+        self.object_init_state = to_torch( # type: ignore
             self.object_init_state, device=self.device, dtype=torch.float
         ).view(self.num_envs, 13)
         
-        self.hand_indices = to_torch(
+        self.hand_indices = to_torch( # type: ignore
             self.hand_indices, dtype=torch.long, device=self.device
         )
         
-        self.object_indices = to_torch(
+        self.object_indices = to_torch( # type: ignore
             self.object_indices, dtype=torch.long, device=self.device
         )
 
@@ -492,7 +492,7 @@ class ArnieDrawer(BaseTask):
         num_ft_states = 13 * int(self.num_fingertips)  # 130
         num_ft_force_torques = 6 * int(self.num_fingertips)  # 60
 
-        self.obs_buf[:, 0 : self.num_arnie_dofs] = unscale(self.arnie_dof_pos, self.arnie_dof_lower_limits, self.arnie_dof_upper_limits)
+        self.obs_buf[:, 0 : self.num_arnie_dofs] = unscale(self.arnie_dof_pos, self.arnie_dof_lower_limits, self.arnie_dof_upper_limits) # type: ignore
         self.obs_buf[:, self.num_arnie_dofs : 2 * self.num_arnie_dofs] = ( self.vel_obs_scale * self.arnie_dof_vel )
         self.obs_buf[:, self.num_arnie_dofs * 2 : 3 * self.num_arnie_dofs] = ( self.force_torque_obs_scale * self.dof_force_tensor[:, :self.num_arnie_dofs] )
 
@@ -503,14 +503,14 @@ class ArnieDrawer(BaseTask):
         hand_pose_start = fingertip_obs_start + num_ft_states
 
         self.obs_buf[:, hand_pose_start : hand_pose_start + 3] = self.left_hand_pos
-        self.obs_buf[:, hand_pose_start + 3 : hand_pose_start + 4] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[0].unsqueeze(-1)
-        self.obs_buf[:, hand_pose_start + 4 : hand_pose_start + 5] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[1].unsqueeze(-1)
-        self.obs_buf[:, hand_pose_start + 5 : hand_pose_start + 6] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[2].unsqueeze(-1)
+        self.obs_buf[:, hand_pose_start + 3 : hand_pose_start + 4] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[0].unsqueeze(-1) # type: ignore
+        self.obs_buf[:, hand_pose_start + 4 : hand_pose_start + 5] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[1].unsqueeze(-1) # type: ignore
+        self.obs_buf[:, hand_pose_start + 5 : hand_pose_start + 6] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[2].unsqueeze(-1) # type: ignore
 
         self.obs_buf[:, hand_pose_start + 6 : hand_pose_start + 9] = self.right_hand_pos
-        self.obs_buf[:, hand_pose_start + 9 : hand_pose_start + 10] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[0].unsqueeze(-1)
-        self.obs_buf[:, hand_pose_start + 10 : hand_pose_start + 11] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[1].unsqueeze(-1)
-        self.obs_buf[:, hand_pose_start + 11 : hand_pose_start + 12] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[2].unsqueeze(-1)
+        self.obs_buf[:, hand_pose_start + 9 : hand_pose_start + 10] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[0].unsqueeze(-1) # type: ignore
+        self.obs_buf[:, hand_pose_start + 10 : hand_pose_start + 11] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[1].unsqueeze(-1) # type: ignore
+        self.obs_buf[:, hand_pose_start + 11 : hand_pose_start + 12] = get_euler_xyz(self.hand_orientations[self.hand_indices, :])[2].unsqueeze(-1) # type: ignore
 
         action_obs_start = hand_pose_start + 12
 
@@ -524,7 +524,7 @@ class ArnieDrawer(BaseTask):
 
     def reset(self, env_ids):
         # generate random floats for offsetting
-        rand_floats = torch_rand_float(-1.0, 1.0, (len(env_ids), self.num_arnie_dofs + self.num_object_dofs), device=self.device)
+        rand_floats = torch_rand_float(-1.0, 1.0, (len(env_ids), self.num_arnie_dofs + self.num_object_dofs), device=self.device) # type: ignore
         
         # copy initial state
         self.root_state_tensor[self.object_indices[env_ids]] = self.object_init_state[env_ids].clone()
@@ -545,16 +545,16 @@ class ArnieDrawer(BaseTask):
         self.arnie_dof_vel[env_ids, :] = (self.arnie_dof_default_vel+ self.reset_dof_vel_noise * rand_floats[:, 0 : self.num_arnie_dofs])
         
         # reset object pos and vel
-        self.object_dof_pos[env_ids, :] = to_torch([0], device=self.device)
-        self.object_dof_vel[env_ids, :] = to_torch([0], device=self.device)
+        self.object_dof_pos[env_ids, :] = to_torch([0], device=self.device) # type: ignore
+        self.object_dof_vel[env_ids, :] = to_torch([0], device=self.device) # type: ignore
         
         # prev and current targets set to random position for arms    
         self.prev_targets[env_ids, : self.num_arnie_dofs] = pos
         self.cur_targets[env_ids, : self.num_arnie_dofs] = pos
         
         # prev and current targets set to zero for drawer
-        self.prev_targets[env_ids, self.num_arnie_dofs : self.num_arnie_dofs + self.num_object_dofs] = to_torch([0], device=self.device)
-        self.cur_targets[env_ids, self.num_arnie_dofs : self.num_arnie_dofs + self.num_object_dofs] = to_torch([0], device=self.device)
+        self.prev_targets[env_ids, self.num_arnie_dofs : self.num_arnie_dofs + self.num_object_dofs] = to_torch([0], device=self.device) # type: ignore
+        self.cur_targets[env_ids, self.num_arnie_dofs : self.num_arnie_dofs + self.num_object_dofs] = to_torch([0], device=self.device) # type: ignore
         
         # set state to initial state
         self.hand_positions[hand_indices.to(torch.long), :] = self.saved_root_tensor[hand_indices.to(torch.long), 0:3]
@@ -592,7 +592,6 @@ class ArnieDrawer(BaseTask):
         self.successes[env_ids] = 0
 
     def pre_physics_step(self, actions):
-        ### Uses force control
         env_ids = self.reset_buf.nonzero(as_tuple=False).squeeze(-1)
 
         if len(env_ids) > 0:
@@ -600,9 +599,9 @@ class ArnieDrawer(BaseTask):
 
         self.actions = actions.clone().to(self.device)
         
-        self.cur_targets[:, :self.num_arnie_dofs] = scale(self.actions[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits)
+        self.cur_targets[:, :self.num_arnie_dofs] = scale(self.actions[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits) # type: ignore
         self.cur_targets[:, :self.num_arnie_dofs] = self.act_moving_average * self.cur_targets[:, :self.num_arnie_dofs] + (1.0 - self.act_moving_average) * self.prev_targets[:, :self.num_arnie_dofs]
-        self.cur_targets[:, :self.num_arnie_dofs] = tensor_clamp(self.cur_targets[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits)
+        self.cur_targets[:, :self.num_arnie_dofs] = tensor_clamp(self.cur_targets[:, :self.num_arnie_dofs], self.arnie_dof_lower_limits, self.arnie_dof_upper_limits) # type: ignore
 
         self.prev_targets[:, :self.num_arnie_dofs] = self.cur_targets[:, :self.num_arnie_dofs]
         
@@ -664,6 +663,7 @@ class ArnieDrawer(BaseTask):
     def render_point_cloud(self):
         self.gym.render_all_camera_sensors(self.sim)
         self.gym.start_access_image_tensors(self.sim)
+        
         point_clouds = torch.zeros((self.num_envs, self.pointCloudDownsampleNum, 3), device=self.device)
 
         useSeg = True # use segmentation of object pcd
@@ -683,11 +683,9 @@ class ArnieDrawer(BaseTask):
             
             point_clouds[i] = selected_points
         
-        # Create Open3D point cloud from numpy array
+        # Pointcloud visualisation
         point_cloud = o3d.geometry.PointCloud()
         point_cloud.points = o3d.utility.Vector3dVector(point_clouds[0, :, :3].cpu().numpy())
-
-        # Save the point cloud as a PLY file
         o3d.io.write_point_cloud("pcd.ply", point_cloud)
 
         self.gym.end_access_image_tensors(self.sim)
@@ -764,15 +762,10 @@ def compute_hand_reward(
 
 @torch.jit.script
 def depth_image_to_point_cloud_GPU(camera_tensor, camera_view_matrix_inv, camera_proj_matrix, u, v, width:float, height:float, depth_bar:float, device:torch.device):
-    # time1 = time.time()
     depth_buffer = camera_tensor.to(device)
 
-    # Get the camera view matrix and invert it to transform points from camera to world space
     vinv = camera_view_matrix_inv
 
-    # Get the camera projection matrix and get the necessary scaling
-    # coefficients for deprojection
-    
     proj = camera_proj_matrix
     fu = 2/proj[0, 0]
     fv = 2/proj[1, 1]
