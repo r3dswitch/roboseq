@@ -1,0 +1,14 @@
+"""
+Description: Segmentation fault (core dumped) when running base pipeline using GPU
+
+Steps to Reproduce:
+    1) python train.py --num_envs=1 --algo=ppo --pipeline=gpu --task=ArnieDrawer
+    2) Arnie Drawer Baseline version file without any additional visualisation code
+    3) roboseq conda environment
+
+Potential Causes: 
+    1) GPU incompatibility
+    2) Missing function call line
+
+Solution: Use Nvidia Driver 535 not 470 which is default. Also reinstall NVCC
+"""

@@ -43,7 +43,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/base.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/base.obj" />
       </geometry>
       <material
         name="">
@@ -57,7 +57,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/base.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/base.stl" />
       </geometry>
     </collision>
   </link>
@@ -83,7 +83,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_1.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_1.obj" />
       </geometry>
       <material
         name="">
@@ -97,7 +97,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_1.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_1.stl" />
       </geometry>
     </collision>
   </link>
@@ -141,7 +141,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_2.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_2.obj" />
       </geometry>
       <material
         name="">
@@ -155,7 +155,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_2.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_2.stl" />
       </geometry>
     </collision>
   </link>
@@ -199,7 +199,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_3.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_3.obj" />
       </geometry>
       <material
         name="">
@@ -213,7 +213,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_3.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_3.stl" />
       </geometry>
     </collision>
   </link>
@@ -257,7 +257,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_4.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_4.obj" />
       </geometry>
       <material
         name="">
@@ -271,7 +271,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_4.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_4.stl" />
       </geometry>
     </collision>
   </link>
@@ -315,7 +315,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_5.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_5.obj" />
       </geometry>
       <material
         name="">
@@ -329,7 +329,7 @@
         rpy="3.1415926531795866 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_5.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_5.stl" />
       </geometry>
     </collision>
   </link>
@@ -373,7 +373,7 @@
         rpy="3.1415926531795866 0 3.14159265359" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_6.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_6.obj" />
       </geometry>
       <material
         name="">
@@ -387,7 +387,7 @@
         rpy="3.1415926531795866 0 3.14159265359" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_6.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_6.stl" />
       </geometry>
     </collision>
   </link>
@@ -431,7 +431,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/visual/link_7.obj" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/visual/link_7.obj" />
       </geometry>
       <material
         name="">
@@ -445,7 +445,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="arnie/models/diana_v2/meshes/collision/link_7.stl" />
+          filename="/home/soumya_mondal/Desktop/Projects/Thesis/assets/urdf/Diana/meshes/collision/link_7.stl" />
       </geometry>
     </collision>
   </link>

@@ -1,0 +1,62 @@
+"""
+Description: Error converting cropped depth map image to pointcloud
+
+Steps to Reproduce:
+    1) python train.py --num_envs=1 --algo=ppo --pipeline=gpu --task=ArnieDrawer
+    2) Arnie Drawer Baseline set useSeg to true
+    3) roboseq conda environment
+
+Potential Causes: 
+    1) u,v starts at top left and not center
+    2) tensor needs to be contiguous
+    3) y and z needs to be corrected
+
+Solution: 
+
+image = self.image_crop(self.camera_tensors[i], self.u, self.v, self.side)
+points = subset_image_to_point_cloud_GPU(image, self.camera_view_matrixs[0], self.camera_proj_matrixs[0], self.camera_u3, self.camera_v3, self.side, self.side, self.device, 1)
+
+    def image_crop(self, image, u, v, side):  
+        dim = image.shape[0]
+
+        u_end = u + side
+        v_end = v + side
+
+        u = max(0, min(u, dim - side))
+        v = max(0, min(v, dim - side))
+
+        image = image[v:v_end, u:u_end].contiguous()
+
+        return image
+    
+    @torch.jit.script
+    def subset_image_to_point_cloud_GPU(tensor, camera_view_matrix_inv, camera_proj_matrix, u, v, width:float, height:float, device:torch.device, depth_bar:float):
+    
+        depth_buffer = tensor.to(device)
+        
+        vinv = camera_view_matrix_inv    
+        proj = camera_proj_matrix
+
+        fu = 2/proj[0, 0]
+        fv = 2/proj[1, 1]
+
+        centerU = width / 2
+        centerV = height / 2
+
+        Z = depth_buffer
+        X = -(u-centerU)/width * Z * fu
+        Y = (v-centerV)/height * Z * fv
+
+        Z = Z.view(-1)
+        valid = Z > -depth_bar
+        X = X.view(-1)
+        Y = Y.view(-1)
+
+        position = torch.vstack((X, Y, Z, torch.ones(len(X), device=device)))[:, valid]
+        position = position.permute(1, 0)
+        position = position@vinv
+
+        points = position[:, 0:3]
+
+        return points
+"""
