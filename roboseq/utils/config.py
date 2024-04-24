@@ -69,7 +69,7 @@ def set_seed(seed, torch_deterministic=False):
 
 def retrieve_cfg(args, use_rlg_config=False):
     if args.task in [
-        "ArnieDrawer"
+        "ArnieDrawer", "FirstPrinciples"
     ]:
         return (
             os.path.join(

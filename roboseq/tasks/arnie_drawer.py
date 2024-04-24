@@ -10,6 +10,7 @@ import logging
 from PIL import Image
 import open3d as o3d
 
+
 def iprint(*strings):
     print(strings)
     exit()
@@ -140,13 +141,13 @@ class ArnieDrawer(BaseTask):
 
         self.arnie_default_dof_pos = to_torch(
             [
-                -0.4,
+                -0.9,
                 1.57,
+                3.12,
                 0,
-                0,
-                0,
-                0,
-                0,
+                -0.2,
+                0.44,
+                -0.9,
                 0,
                 0,
                 0,
@@ -247,7 +248,7 @@ class ArnieDrawer(BaseTask):
         upper = gymapi.Vec3(spacing, spacing, spacing)
 
         arnie_start_pose = gymapi.Transform()
-        arnie_start_pose.p = gymapi.Vec3(2, 0, 0)
+        arnie_start_pose.p = gymapi.Vec3(1.75, 0, 0)
         arnie_start_pose.r = gymapi.Quat().from_euler_zyx(0, 0, 3.14159)
         object_start_pose = gymapi.Transform()
         object_start_pose.p = gymapi.Vec3(1, 0, 0.425)
@@ -272,6 +273,7 @@ class ArnieDrawer(BaseTask):
         arnie_asset = self.gym.load_asset(self.sim, asset_root, arnie_asset_file, asset_options)
         object_asset = self.gym.load_asset(self.sim, asset_root, object_asset_file, asset_options)
         table_asset = self.gym.load_asset(self.sim, asset_root, table_asset_file, asset_options)
+        locator_asset = self.gym.create_box(self.sim, 0.05 , 0.05 , 0.05 , asset_options)
 
         arnie_dof_props = self.gym.get_asset_dof_properties(arnie_asset)
         object_dof_props = self.gym.get_asset_dof_properties(object_asset)
@@ -308,6 +310,7 @@ class ArnieDrawer(BaseTask):
         ]
         
         """Test Code"""
+        
         self.cameras = []
         self.camera_tensors = []
         self.camera_view_matrixs = []
@@ -316,6 +319,8 @@ class ArnieDrawer(BaseTask):
         self.camera_props = gymapi.CameraProperties()
         self.camera_props.width = 256
         self.camera_props.height = 256
+        self.camera_props.near_plane = 0.1
+        self.camera_props.far_plane = 0.2
         self.camera_props.enable_tensors = True
 
         self.env_origin = torch.zeros((self.num_envs, 3), device=self.device, dtype=torch.float)
@@ -324,6 +329,11 @@ class ArnieDrawer(BaseTask):
         self.camera_v = torch.arange(0, self.camera_props.height, device=self.device)
 
         self.camera_v2, self.camera_u2 = torch.meshgrid(self.camera_v, self.camera_u, indexing='ij')
+        self.u = 64
+        self.v = 64
+        self.side = 128
+        self.camera_v3, self.camera_u3 = torch.meshgrid(torch.arange(0, self.side, device=self.device), torch.arange(0, self.side, device=self.device), indexing='ij')
+        
         """Test Code Ends"""
 
         self.left_hand_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"left_base_link")
@@ -333,11 +343,12 @@ class ArnieDrawer(BaseTask):
         self.right_thumb_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"right_Thumb_Phadist")
         self.right_index_handle = self.gym.find_asset_rigid_body_index(arnie_asset,"right_Index_Phadist")
 
-        self.drawer_top_handle = self.gym.find_asset_rigid_body_index(object_asset,"drawer_handle_top")
-        self.drawer_bottom_handle = self.gym.find_asset_rigid_body_index(object_asset,"drawer_handle_bottom")
-        self.drawer_left_handle = self.gym.find_asset_rigid_body_index(object_asset,"door_right_nob_link")
-        self.drawer_right_handle = self.gym.find_asset_rigid_body_index(object_asset,"door_left_nob_link")
+        self.object_handle = self.gym.find_asset_rigid_body_index(object_asset,"base")
         
+        cam_start_pose = gymapi.Transform()
+        cam_start_pose.p = gymapi.Vec3(0.5, 0, 0.5)
+        cam_start_pose.r = gymapi.Quat().from_euler_zyx(0, 0,0)
+
         for i in range(self.num_envs):
             env_ptr = self.gym.create_env(self.sim, lower, upper, num_per_row)
             arnie_actor = self.gym.create_actor(
@@ -349,6 +360,7 @@ class ArnieDrawer(BaseTask):
             table_actor = self.gym.create_actor(
                 env_ptr, table_asset, table_start_pose, "table", i, 0, 0
             )
+            cam_locator = self.gym.create_actor(env_ptr, locator_asset, cam_start_pose, "cam", i, 0, 0)
             self.object_init_state.append(
                 [
                     object_start_pose.p.x,
@@ -376,6 +388,25 @@ class ArnieDrawer(BaseTask):
             )
             self.hand_indices.append(hand_idx)
             self.env_indices.append(env_ptr)
+            
+            """Test Code"""
+            camera_handle = self.gym.create_camera_sensor(env_ptr, self.camera_props)
+            self.gym.set_camera_location(camera_handle, env_ptr, cam_start_pose.p, object_start_pose.p)  #0.785
+            camera_tensor = self.gym.get_camera_image_gpu_tensor(self.sim, env_ptr, camera_handle, gymapi.IMAGE_DEPTH)
+            
+            torch_cam_tensor = gymtorch.wrap_tensor(camera_tensor)
+            cam_vinv = torch.inverse((torch.tensor(self.gym.get_camera_view_matrix(self.sim, env_ptr, camera_handle)))).to(self.device)
+            cam_proj = torch.tensor(self.gym.get_camera_proj_matrix(self.sim, env_ptr, camera_handle), device=self.device)
+
+            origin = self.gym.get_env_origin(env_ptr)
+            self.env_origin[i][0] = origin.x
+            self.env_origin[i][1] = origin.y
+            self.env_origin[i][2] = origin.z
+            self.camera_tensors.append(torch_cam_tensor)
+            self.camera_view_matrixs.append(cam_vinv)
+            self.camera_proj_matrixs.append(cam_proj)
+            self.cameras.append(camera_handle)
+            """Test Code Ends"""
 
         self.object_init_state = to_torch(
             self.object_init_state, device=self.device, dtype=torch.float
@@ -388,24 +419,6 @@ class ArnieDrawer(BaseTask):
         self.object_indices = to_torch(
             self.object_indices, dtype=torch.long, device=self.device
         )
-
-        """Test Code"""
-        camera_handle = self.gym.create_camera_sensor(env_ptr, self.camera_props)
-        self.gym.set_camera_location(camera_handle, env_ptr, gymapi.Vec3(1.9, 0, 1.8), gymapi.Vec3(0, 0, 0))  #0.785
-        camera_tensor = self.gym.get_camera_image_gpu_tensor(self.sim, env_ptr, camera_handle, gymapi.IMAGE_DEPTH)
-        torch_cam_tensor = gymtorch.wrap_tensor(camera_tensor)
-        cam_vinv = torch.inverse((torch.tensor(self.gym.get_camera_view_matrix(self.sim, env_ptr, camera_handle)))).to(self.device)
-        cam_proj = torch.tensor(self.gym.get_camera_proj_matrix(self.sim, env_ptr, camera_handle), device=self.device)
-
-        origin = self.gym.get_env_origin(env_ptr)
-        self.env_origin[i][0] = origin.x
-        self.env_origin[i][1] = origin.y
-        self.env_origin[i][2] = origin.z
-        self.camera_tensors.append(torch_cam_tensor)
-        self.camera_view_matrixs.append(cam_vinv)
-        self.camera_proj_matrixs.append(cam_proj)
-        self.cameras.append(camera_handle)
-        """Test Code Ends"""
 
     def compute_reward(self, actions):
         (
@@ -423,10 +436,6 @@ class ArnieDrawer(BaseTask):
             self.max_episode_length,
             self.object_pos,
             self.object_rot,
-            self.drawer_left_knob_pos,
-            self.drawer_right_knob_pos,
-            self.drawer_bottom_handle_pos,
-            self.drawer_top_handle_pos,
             self.left_hand_pos,
             self.right_hand_pos,
             self.right_hand_ff_pos,
@@ -451,25 +460,9 @@ class ArnieDrawer(BaseTask):
         self.object_linvel = self.root_state_tensor[self.object_indices, 7:10]
         self.object_angvel = self.root_state_tensor[self.object_indices, 10:13]
 
-        # Left Knob
-        self.drawer_left_knob_pos = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_left_handle, 0:3]
-        self.drawer_left_knob_rot = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_left_handle, 3:7]
-        
-        # Right Knob
-        self.drawer_right_knob_pos = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_right_handle, 0:3]
-        self.drawer_right_knob_rot = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_right_handle, 3:7]
-
-        # Bottom Handle
-        self.drawer_bottom_handle_pos = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_bottom_handle, 0:3]
-        self.drawer_bottom_handle_rot = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_bottom_handle, 3:7]
-
-        # Top Handle
-        self.drawer_top_handle_pos = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_top_handle, 0:3]
-        self.drawer_top_handle_rot = self.rigid_body_states[:, self.num_arnie_rbs + self.drawer_top_handle, 3:7]
-
         self.left_hand_pos = self.rigid_body_states[:, self.left_hand_handle, 0:3] 
         self.left_hand_rot = self.rigid_body_states[:, self.left_hand_handle, 3:7]
-
+        
         self.right_hand_pos = self.rigid_body_states[:, self.right_hand_handle, 0:3]
         self.right_hand_rot = self.rigid_body_states[:, self.right_hand_handle, 3:7]
 
@@ -489,10 +482,9 @@ class ArnieDrawer(BaseTask):
         self.fingertip_pos = self.rigid_body_states[:, self.fingertip_handles][:, :, 0:3]
 
         self.compute_full_state()
-        
         self.ctr+=1
         
-        if self.ctr == 40: # 8 times in 0ne iteration, once every 5 iterations
+        if self.ctr == 40 : # 8 times in 0ne iteration, once every 5 iterations
             self.render_point_cloud()
             self.ctr = 0
 
@@ -529,11 +521,6 @@ class ArnieDrawer(BaseTask):
         self.obs_buf[:, obj_obs_start : obj_obs_start + 7] = self.object_pose
         self.obs_buf[:, obj_obs_start + 7 : obj_obs_start + 10] = self.object_linvel
         self.obs_buf[:, obj_obs_start + 10 : obj_obs_start + 13] = (self.vel_obs_scale * self.object_angvel)
-
-        self.obs_buf[:, obj_obs_start + 13 : obj_obs_start + 16] = self.drawer_left_knob_pos
-        self.obs_buf[:, obj_obs_start + 16 : obj_obs_start + 19] = self.drawer_right_knob_pos
-        self.obs_buf[:, obj_obs_start + 19 : obj_obs_start + 22] = self.drawer_bottom_handle_pos
-        self.obs_buf[:, obj_obs_start + 22 : obj_obs_start + 25] = self.drawer_top_handle_pos
 
     def reset(self, env_ids):
         # generate random floats for offsetting
@@ -626,31 +613,71 @@ class ArnieDrawer(BaseTask):
         self.compute_observations()
         self.compute_reward(self.actions)
 
-    def rand_row(self, tensor, dim_needed):  
+    def test_point_xyz(self, points, env):
+        self.gym.clear_lines(self.viewer)
+        
+        x = torch.mean(points[:, 0]).item()
+        y = torch.mean(points[:, 1]).item()
+        z = torch.mean(points[:, 2]).item()
+
+        delta = 0.1
+        x_beg = x - delta
+        y_beg = y - delta
+        z_beg = z - delta
+
+        x_end = x + delta
+        y_end = y + delta
+        z_end = z + delta
+
+        self.gym.add_lines(self.viewer, env, 1, [x_beg, y, z, x_end, y, z], [0.85, 0.1, 0.1])
+        self.gym.add_lines(self.viewer, env, 1, [x, y_beg, z, x, y_end, z], [0.1, 0.85, 0.1])
+        self.gym.add_lines(self.viewer, env, 1, [x, y, z_beg, x, y, z_end], [0.1, 0.1, 0.85])
+     
+    def rand_row(self, tensor, dim_needed): 
         row_total = tensor.shape[0]
         return tensor[torch.randint(low=0, high=row_total, size=(dim_needed,)),:]
 
-    def sample_points(self, points, sample_num=1000, sample_mathed='furthest'):
-        eff_points = points[points[:, 2]>0.04]
+    def image_crop(self, image, u, v, side):  
+        dim = image.shape[0]
+
+        u_end = u + side
+        v_end = v + side
+
+        u = max(0, min(u, dim - side))
+        v = max(0, min(v, dim - side))
+
+        image = image[v:v_end, u:u_end].contiguous()
+
+        return image
+        
+    def sample_points(self, points, sample_num=1000, sample_method='random'):
+        eff_points = points[points[:, 2] > 0.04]
         if eff_points.shape[0] < sample_num :
             eff_points = points
-        if sample_mathed == 'random':
+        if sample_method == 'random':
             sampled_points = self.rand_row(eff_points, sample_num)
-        elif sample_mathed == 'furthest':
-            sampled_points_id = pointnet2_utils.furthest_point_sample(eff_points.reshape(1, *eff_points.shape), sample_num)
-            sampled_points = eff_points.index_select(0, sampled_points_id[0].long())
+        elif sample_method == 'furthest':
+            pass
+            # TODO Implement Furthest Point Sampling
         return sampled_points
 
     def render_point_cloud(self):
         self.gym.render_all_camera_sensors(self.sim)
         self.gym.start_access_image_tensors(self.sim)
         point_clouds = torch.zeros((self.num_envs, self.pointCloudDownsampleNum, 3), device=self.device)
-        for i in range(self.num_envs):
-            # Here is an example. In practice, it's better not to convert tensor from GPU to CPU
-            points = depth_image_to_point_cloud_GPU(self.camera_tensors[i], self.camera_view_matrixs[i], self.camera_proj_matrixs[i], self.camera_u2, self.camera_v2, self.camera_props.width, self.camera_props.height, 10, self.device)
-            
+
+        useSeg = True # use segmentation of object pcd
+
+        for i in range(self.num_envs): # suboptimal to convert between cpu and gpu
+            if not useSeg:
+                points = depth_image_to_point_cloud_GPU(self.camera_tensors[i], self.camera_view_matrixs[i], self.camera_proj_matrixs[i], self.camera_u2, self.camera_v2, self.camera_props.width, self.camera_props.height, 10, self.device)
+            else:
+                image = self.image_crop(self.camera_tensors[i], self.u, self.v, self.side)
+                points = subset_image_to_point_cloud_GPU(image, self.camera_view_matrixs[i], self.camera_proj_matrixs[i], self.camera_u3, self.camera_v3, self.side, self.side, self.device, 1)
+                       
             if points.shape[0] > 0:
-                selected_points = self.sample_points(points, sample_num=self.pointCloudDownsampleNum, sample_mathed='random')
+                selected_points = self.sample_points(points, sample_num=self.pointCloudDownsampleNum, sample_method='random')
+                self.test_point_xyz(selected_points, self.env_indices[i])
             else:
                 selected_points = torch.zeros((self.num_envs, self.pointCloudDownsampleNum, 3), device=self.device)
             
@@ -675,10 +702,6 @@ def compute_hand_reward(
     max_episode_length: float,
     object_pos,
     object_rot,
-    drawer_left_knob_pos,
-    drawer_right_knob_pos,
-    drawer_bottom_handle_pos,
-    drawer_top_handle_pos,
     left_hand_pos,
     right_hand_pos,
     right_ff_pos,
@@ -689,34 +712,40 @@ def compute_hand_reward(
     actions,
     action_penalty_scale: float,
 ):
+    l_dist = torch.norm(object_pos - left_ff_pos, p=2, dim=-1) + torch.norm(object_pos - left_th_pos, p=2, dim=-1)
 
-    l_t_dist = torch.norm(drawer_top_handle_pos - left_ff_pos, p=2, dim=-1) + torch.norm(drawer_top_handle_pos - left_th_pos, p=2, dim=-1)
+    r_dist = torch.norm(object_pos - right_ff_pos, p=2, dim=-1) + torch.norm(object_pos - right_th_pos, p=2, dim=-1)
 
-    r_t_dist = torch.norm(drawer_top_handle_pos - right_ff_pos, p=2, dim=-1) + torch.norm(drawer_top_handle_pos - right_th_pos, p=2, dim=-1)
+    avg_dist = (l_dist + r_dist) * 0.5
 
-    finger_cabinet_dist = (l_t_dist + r_t_dist) * 0.5
+    # dist_reward = 1.0 / (1.0 + avg_dist**2)
+    # dist_reward *= dist_reward
+    # dist_reward = torch.where(
+    #     l_dist + r_dist <= 0.04,
+    #     dist_reward * 2,
+    #     dist_reward,
+    # )
 
-    dist_reward = 1.0 / (1.0 + finger_cabinet_dist**2)
+    dist_reward = 1.0 / (1.0 + l_dist**2)
     dist_reward *= dist_reward
     dist_reward = torch.where(
-        l_t_dist + r_t_dist <= 0.04,
+        l_dist <= 0.02,
         dist_reward * 2,
-        dist_reward,
+        dist_reward
     )
-
     action_penalty = torch.sum(actions**2, dim=-1)
 
     reward = dist_reward * dist_reward_scale - action_penalty * action_penalty_scale
 
     resets = torch.where(
-        l_t_dist >= 5.5, torch.ones_like(reset_buf), reset_buf
+        l_dist >= 5.5, torch.ones_like(reset_buf), reset_buf
     )  # 5.5 = distance after which hand goes stray
-    resets = torch.where(r_t_dist >= 5.5, torch.ones_like(resets), resets)
+    resets = torch.where(r_dist >= 5.5, torch.ones_like(resets), resets)
 
     successes = torch.where(
         successes == 0,
         torch.where(
-            torch.abs(drawer_top_handle_pos[:, 0]) > 1.2,
+            torch.abs(object_pos[:, 2]) > 0.2,
             torch.ones_like(successes),
             successes,
         ),
@@ -750,6 +779,37 @@ def depth_image_to_point_cloud_GPU(camera_tensor, camera_view_matrix_inv, camera
 
     centerU = width/2
     centerV = height/2
+
+    Z = depth_buffer
+    X = -(u-centerU)/width * Z * fu
+    Y = (v-centerV)/height * Z * fv
+
+    Z = Z.view(-1)
+    valid = Z > -depth_bar
+    X = X.view(-1)
+    Y = Y.view(-1)
+
+    position = torch.vstack((X, Y, Z, torch.ones(len(X), device=device)))[:, valid]
+    position = position.permute(1, 0)
+    position = position@vinv
+
+    points = position[:, 0:3]
+
+    return points
+
+@torch.jit.script
+def subset_image_to_point_cloud_GPU(tensor, camera_view_matrix_inv, camera_proj_matrix, u, v, width:float, height:float, device:torch.device, depth_bar:float):
+    
+    depth_buffer = tensor.to(device)
+    
+    vinv = camera_view_matrix_inv    
+    proj = camera_proj_matrix
+
+    fu = 2/proj[0, 0]
+    fv = 2/proj[1, 1]
+
+    centerU = width / 2
+    centerV = height / 2
 
     Z = depth_buffer
     X = -(u-centerU)/width * Z * fu

@@ -8,6 +8,7 @@
 
 # Arnie Tasks
 from roboseq.tasks.arnie_drawer import ArnieDrawer
+from roboseq.tasks.first_principles import FirstPrinciples
 
 from roboseq.tasks.hand_base.vec_task import (
     VecTaskCPU,
@@ -82,7 +83,6 @@ def parse_task(args, cfg, cfg_train, sim_params, agent_index):
                 device_type=args.device,
                 device_id=device_id,
                 headless=args.headless,
-                is_multi_agent=False,
             )
         except NameError as e:
             print(e)

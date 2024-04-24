@@ -1,7 +1,7 @@
 # if given, will override the device setting in gym. 
 env: 
-  env_name: "arnie_grasp_cube"
-  numEnvs: 64
+  env_name: "first_principles"
+  numEnvs: 1
   envSpacing: 2
   episodeLength: 250
   enableDebugVis: False
